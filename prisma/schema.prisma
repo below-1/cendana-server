@@ -1,0 +1,215 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  CUSTOMER
+  SUPPLIER
+  STAF
+}
+
+enum OrderType {
+  SALE
+  BUY
+}
+
+enum DelayType {
+  PAYABLE
+  RECEIVABLE
+}
+
+enum TransactionType {
+  DEBIT
+  CREDIT
+}
+
+enum TransactionStatus {
+  NEW
+  CANCELLED
+  FAILED
+  PENDING
+  DECLINED
+  REJECTED
+  SUCCESS
+}
+
+enum PaymentMethod {
+  OFFLINE
+  CASH
+  ON_DELIVERY
+  CHEQUE_DRAFT
+  WIRED
+  ONLINE
+}
+
+model ProductCategory {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  title     String    @db.VarChar(255)
+  products  Product[]
+}
+
+model OpexCategory {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String   @db.VarChar(255)
+  opexes    Opex[]
+}
+
+model ToolsCategory {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String   @db.VarChar(255)
+}
+
+model User {
+  id                    Int     @id @default(autoincrement())
+  name                  String  @db.VarChar(255)
+  username              String?
+  password              String?
+  role                  Role
+  address               String?
+  mobile                String?
+  email                 String?
+
+  supplierStockRecords  StockItem[]   @relation("SupplierStockRecords")
+  createdTransactions   Transaction[] @relation("CreatedTransactions")
+  createdOrders         Order[]       @relation("CreatedOrders")
+  createdDelays         Delay[]       @relation("CreatedDelays")
+}
+
+model Product {
+  id           Int               @id @default(autoincrement())
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  name         String            @db.VarChar(255)
+  categories   ProductCategory[]
+  stockRecords StockItem[]
+  saleRecords  OrderItem[]
+  discount  Int     @default(0)
+  unit      String
+}
+
+model StockItem {
+  id         Int         @id @default(autoincrement())
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  supplier   User        @relation("SupplierStockRecords", fields: [supplierId], references: [id])
+  supplierId Int
+  product    Product     @relation(fields: [productId], references: [id])
+  productId  Int
+  order      Order       @relation(fields: [orderId], references: [id])
+  orderId    Int
+  orderItems OrderItem[]
+
+  buyPrice  Decimal
+  sellPrice Decimal
+  discount  Int     @default(0)
+
+  unit     String @db.Text
+
+  available Int    @default(0)
+  sell      Int    @default(0)
+  defect    Int    @default(0)
+  returned  Int    @default(0)
+}
+
+model OrderItem {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  product     Product   @relation(fields: [productId], references: [id])
+  productId   Int
+  stockItem   StockItem @relation(fields: [stockItemId], references: [id])
+  stockItemId Int
+  order       Order     @relation(fields: [orderId], references: [id])
+  orderId     Int
+
+  buyPrice    Decimal
+  sellPrice   Decimal
+  quantity    Int
+  discount    Int     @default(0)
+  description String? @db.Text
+}
+
+model Order {
+  id                    Int             @id @default(autoincrement())
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+
+  author                User            @relation("CreatedOrders", fields: [authorId], references: [id])
+  authorId              Int
+  transaction           Transaction?
+  delay                 Delay?          @relation(fields: [delayId], references: [id])
+  delayId               Int?
+  orderItems            OrderItem[]
+  stockItems            StockItem[]
+
+  orderType             OrderType
+  itemDiscount          Decimal         @default(0)
+  tax                   Int             @default(0)
+  shipping              Decimal         @default(0)
+  subTotal              Decimal
+  total                 Decimal
+  grandTotal            Decimal
+  discount              Int             @default(0)
+  promo                 String?
+  description           String?         @db.Text
+}
+
+model Delay {
+  id                    Int      @id @default(autoincrement())
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  author                User         @relation("CreatedDelays", fields: [authorId], references: [id])
+  authorId              Int
+  type                  DelayType
+  order                 Order?
+  transaction           Transaction?
+
+  dueDate               DateTime
+  total                 Decimal
+  complete              Boolean
+}
+
+model Transaction {
+  id                    Int                     @id @default(autoincrement())
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  author                User                    @relation("CreatedTransactions", fields: [authorId], references: [id])
+  authorId              Int
+
+  type                  TransactionType
+  status                TransactionStatus
+  paymentMethod         PaymentMethod
+
+  order                 Order?                  @relation(fields: [orderId], references: [id])
+  orderId               Int?
+  delay                 Delay?                  @relation(fields: [delayId], references: [id])
+  delayId Int?
+  opex                  Opex?                    @relation(fields: [opexId], references: [id])
+  opexId                Int?
+}
+
+model Opex {
+  id                    Int                     @id @default(autoincrement())
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  title                 String                  @db.VarChar(255)
+  category              OpexCategory[]
+  description           String?                 @db.Text
+  transaction           Transaction?
+}

@@ -1,0 +1,37 @@
+import fastify from 'fastify'
+import blipp from 'fastify-blipp'
+import cors from 'fastify-cors'
+import swagger from 'fastify-swagger'
+
+import * as components from '@cend/components'
+
+export function createServer() {
+  const server = fastify({
+    // logger: process.env.NODE_ENV == 'development',
+    logger: true
+  })
+  server.register(cors)
+  server.register(blipp)
+  server.register(swagger, {
+    routePrefix: '/documentation',
+    exposeRoute: true,
+    swagger: {
+      info: {
+        title: 'Cendana API',
+        version: '1.0.0'
+      },
+      tags: [
+        { name: 'product-categories', description: "Product Categories' Product Endpoints" },
+        { name: 'products', description: "Product's Endpoints" }
+      ]
+    }
+  } as any)
+
+  // server.register(prisma)
+  server.register(components.auth.plugin, { prefix: '/auth' })
+  server.register(components.productCategory.plugin, { prefix: '/v1/api/product-categories' })
+  server.register(components.product.plugin, { prefix: '/v1/api/products' })
+  server.register(components.user.plugin, { prefix: '/v1/api/users' })
+
+  return server
+}
