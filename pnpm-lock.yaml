@@ -5,10 +5,12 @@ specifiers:
   '@prisma/client': ^2.27.0
   '@sinclair/typebox': ^0.17.8
   '@types/bcrypt': ^5.0.0
+  '@types/faker': ^5.5.7
   '@types/jsonwebtoken': ^8.5.4
   '@types/node': ^16.3.3
   bcrypt: ^5.0.1
   dotenv: ^10.0.0
+  faker: ^5.5.3
   fastify: ^3.19.1
   fastify-blipp: ^3.1.0
   fastify-cors: ^6.0.2
@@ -38,9 +40,11 @@ dependencies:
 
 devDependencies:
   '@types/bcrypt': 5.0.0
+  '@types/faker': 5.5.7
   '@types/jsonwebtoken': 8.5.4
   '@types/node': 16.3.3
   dotenv: 10.0.0
+  faker: 5.5.3
   prisma: 2.27.0
   ts-node: 10.1.0_11f741051fc5aebfd1e77a6b4af6c1cd
   tsconfig-paths: 3.10.1
@@ -122,6 +126,10 @@ packages:
     resolution: {integrity: sha512-agtcFKaruL8TmcvqbndlqHPSJgsolhf/qPWchFlgnW1gECTN/nKbFcoFnvKAQRFfKbh+BO6A3SWdJu9t+xF3Lw==}
     dependencies:
       '@types/node': 16.4.0
+    dev: true
+
+  /@types/faker/5.5.7:
+    resolution: {integrity: sha512-ejzb61Q5zQTtS0ZIafgQ7ahO5ACzmGhG5PfX2hxWyth3k0/aysb4ZOxKQB8DbzwSPppA5jmFBwqnBxjv5hqI5Q==}
     dev: true
 
   /@types/jsonwebtoken/8.5.4:
@@ -380,6 +388,10 @@ packages:
     resolution: {integrity: sha1-Qa4u62XvpiJorr/qg6x9eSmbCIc=}
     engines: {node: '>= 0.6'}
     dev: false
+
+  /faker/5.5.3:
+    resolution: {integrity: sha512-wLTv2a28wjUyWkbnX7u/ABZBkUkIF2fCd73V6P2oFqEGEktDfzWx4UxrSqtPRw0xPRAcjeAOIiJWqZm3pP4u3g==}
+    dev: true
 
   /fast-decode-uri-component/1.0.1:
     resolution: {integrity: sha512-WKgKWg5eUxvRZGwW8FvfbaH7AXSh2cL+3j5fMGzUMCxWBJ3dV3a7Wz8y2f/uQ0e3B6WmodD3oS54jTQ9HVTIIg==}
