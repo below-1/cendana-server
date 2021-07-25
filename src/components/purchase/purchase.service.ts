@@ -1,12 +1,22 @@
 import * as DTO from './purchase.dto';
 import * as DTOStockItem from '../sitem/stock-item.dto';
-import { Order, StockItem, OrderStatus, OrderType } from '@prisma/client';
+import {
+  Order, 
+  StockItem, 
+  OrderStatus, 
+  OrderType, 
+  DelayType,
+  TransactionStatus, 
+  TransactionType, 
+  PaymentMethod 
+} from '@prisma/client';
 import { prisma } from '@cend/commons/prisma';
-import { Decimal, PrismaClientPromise } from '@prisma/client/runtime';
+import { Decimal } from '@prisma/client/runtime';
 import { findForOrder } from '../sitem/stock-item.view'
 import { findPurchaseById } from './purchase.view'
 import * as productViews from '../product/product.view';
 import * as productServices from '../product/product.service';
+import { repo as transactionRepo } from '../trans'
 
 export async function create(payload: DTO.Create.Marker) {
   const { authorId, targetUserId, ...rest } = payload;
@@ -96,7 +106,7 @@ export async function getCurrentPurchaseTotals(orderId: number) {
   return allTotals;
 }
 
-export async function sealTransaction(orderId: number) {
+export async function sealTransaction(orderId: number, payload: DTO.SealTransaction.Marker) {
   const order = await prisma.order.findFirst({ 
     where: { AND: [
       { id: orderId },
@@ -110,7 +120,8 @@ export async function sealTransaction(orderId: number) {
   for (let stockItem of stockItems) {
     await productServices.updateStocks(stockItem.productId);
   }
-  const updateResult = await prisma.order.update({
+  let transStatements = [];
+  const result = await prisma.order.update({
     where: {
       id: orderId
     },
@@ -118,5 +129,30 @@ export async function sealTransaction(orderId: number) {
       orderStatus: OrderStatus.SEALED
     }
   })
-  return updateResult;
+  const transaction = await transactionRepo.create({
+    orderId: result.id,
+    authorId: payload.authorId,
+    type: TransactionType.CREDIT,
+    status: payload.status,
+    paymentMethod: payload.paymentMethod,
+    nominal: payload.nominal
+  })
+  if (transaction.nominal.lessThan(order.grandTotal)) {
+    if (!payload.delay) {
+      throw new Error(`Due Date of payment is not provided`);
+    }
+    await prisma.delay.create({
+      data: {
+        authorId: payload.authorId,
+        type: DelayType.PAYABLE,
+        order: {
+          connect: { id: orderId }
+        },
+        dueDate: new Date(payload.delay.dueDate),
+        total: order.grandTotal.sub(transaction.nominal),
+        complete: false
+      }
+    })
+  }
+  return result;
 }

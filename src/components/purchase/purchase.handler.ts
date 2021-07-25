@@ -28,6 +28,7 @@ export async function getOne(request: GetOneRequest, reply: Reply) {
 
 export async function seal(request: SealRequest, reply: Reply) {
   const { id } = request.params;
-  const result = await services.sealTransaction(id);
+  const payload = request.body;
+  const result = await services.sealTransaction(id, payload);
   reply.send(result);
 }

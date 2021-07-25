@@ -11,12 +11,11 @@ export async function updateStocks(id: number) {
     },
     where: {
       productId: id,
-      order: {
-        orderStatus: OrderStatus.OPEN
+      available: {
+        gt: 0
       }
     }
   });
-  console.log(currentStockInfo);
   await prisma.product.update({
     where: {
       id
