@@ -29,4 +29,13 @@ export async function plugin(fastify: FastifyInstance) {
     handler: handler.getOne
   })
 
+  fastify.put('/:id/seal', {
+    schema: {
+      tags: ['purchases'],
+      params: ID.Obj,
+      body: DTO.SealTransaction.Obj
+    },
+    handler: handler.seal
+  })
+
 }

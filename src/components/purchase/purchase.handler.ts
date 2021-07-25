@@ -7,6 +7,7 @@ import { ID } from '@cend/commons/request'
 type PostRequest = Request<{ Body: DTO.Create.Marker }>;
 type PurchaseTotalsRequest = Request<{ Params: ID.Marker }>;
 type GetOneRequest = Request<{ Params: ID.Marker }>;
+type SealRequest = Request<{ Params: ID.Marker, Body: DTO.SealTransaction.Marker }>;
 
 export async function post(request: PostRequest, reply: Reply) {
   const payload = request.body;
@@ -23,4 +24,10 @@ export async function getCurrentPurchaseTotals(request: PurchaseTotalsRequest, r
 export async function getOne(request: GetOneRequest, reply: Reply) {
   const purchase = await views.findPurchaseById(request.params.id)
   reply.send(purchase);
+}
+
+export async function seal(request: SealRequest, reply: Reply) {
+  const { id } = request.params;
+  const result = await services.sealTransaction(id);
+  reply.send(result);
 }
