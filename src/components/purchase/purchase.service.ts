@@ -17,6 +17,7 @@ import { findPurchaseById } from './purchase.view'
 import * as productViews from '../product/product.view';
 import * as productServices from '../product/product.service';
 import { repo as transactionRepo } from '../trans'
+import { repo as delayRepo } from '../delay'
 
 export async function create(payload: DTO.Create.Marker) {
   const { authorId, targetUserId, ...rest } = payload;
@@ -141,17 +142,12 @@ export async function sealTransaction(orderId: number, payload: DTO.SealTransact
     if (!payload.delay) {
       throw new Error(`Due Date of payment is not provided`);
     }
-    await prisma.delay.create({
-      data: {
-        authorId: payload.authorId,
-        type: DelayType.PAYABLE,
-        order: {
-          connect: { id: orderId }
-        },
-        dueDate: new Date(payload.delay.dueDate),
-        total: order.grandTotal.sub(transaction.nominal),
-        complete: false
-      }
+    await delayRepo.create({
+      authorId: payload.authorId,
+      type: DelayType.PAYABLE,
+      orderId,
+      dueDate: new Date(payload.delay.dueDate),
+      total: order.grandTotal.sub(transaction.nominal).toString()
     })
   }
   return result;
