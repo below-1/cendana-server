@@ -1,6 +1,27 @@
 import { Static, Type } from '@sinclair/typebox'
 import { prisma } from '@cend/commons/prisma'
 import { Role } from '@prisma/client'
+import { FindOptions } from '@cend/commons/find';
+
+export namespace Find {
+  export const Obj = Type.Intersect([
+    FindOptions.Obj,
+    Type.Object({
+      keyword: Type.String({ default: '' })
+    })]);
+  export type Marker = Static<typeof Obj>;
+}
+
+export namespace Admin {
+  export namespace Find {
+    export const Obj = Type.Intersect([
+      FindOptions.Obj,
+      Type.Object({
+        keyword: Type.Optional(Type.String())
+      })]);
+    export type Marker = Static<typeof Obj>;
+  }
+}
 
 export namespace Create {
   export const Obj = Type.Object({

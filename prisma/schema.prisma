@@ -22,6 +22,11 @@ enum OrderType {
   BUY
 }
 
+enum OrderStatus {
+  OPEN
+  SEALED
+}
+
 enum DelayType {
   PAYABLE
   RECEIVABLE
@@ -84,10 +89,12 @@ model User {
   mobile                String?
   email                 String?
 
-  supplierStockRecords  StockItem[]   @relation("SupplierStockRecords")
-  createdTransactions   Transaction[] @relation("CreatedTransactions")
-  createdOrders         Order[]       @relation("CreatedOrders")
-  createdDelays         Delay[]       @relation("CreatedDelays")
+  createdTransactions           Transaction[] @relation("CreatedTransactions")
+  createdOrders                 Order[]       @relation("CreatedOrders")
+  createdOrderItems             OrderItem[]       @relation("CreatedOrderItems")
+  createdStockItems             StockItem[]       @relation("CreatedStockItems")
+  targetOrders                  Order[]       @relation("OrderTargetUser")
+  createdDelays                 Delay[]       @relation("CreatedDelays")
 }
 
 model Product {
@@ -95,10 +102,19 @@ model Product {
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
   name         String            @db.VarChar(255)
+
+  buyPrice    Decimal @default(0)
+  sellPrice   Decimal @default(0)
+  discount    Int     @default(0)
+
+  available Int    @default(0)
+  sold      Int    @default(0)
+  defect    Int    @default(0)
+  returned  Int    @default(0)
+
   categories   ProductCategory[]
   stockRecords StockItem[]
   saleRecords  OrderItem[]
-  discount  Int     @default(0)
   unit      String
 }
 
@@ -106,22 +122,21 @@ model StockItem {
   id         Int         @id @default(autoincrement())
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
-  supplier   User        @relation("SupplierStockRecords", fields: [supplierId], references: [id])
-  supplierId Int
-  product    Product     @relation(fields: [productId], references: [id])
-  productId  Int
-  order      Order       @relation(fields: [orderId], references: [id])
-  orderId    Int
-  orderItems OrderItem[]
+  author                    User            @relation("CreatedStockItems", fields: [authorId], references: [id])
+  authorId                  Int
+  product                   Product                      @relation(fields: [productId], references: [id])
+  productId                 Int
+  order                     Order           @relation("StockItems", fields: [orderId], references: [id])
+  orderId                   Int
+  orderItems                OrderItem[]
 
   buyPrice  Decimal
   sellPrice Decimal
   discount  Int     @default(0)
 
-  unit     String @db.Text
-
+  quantity Int    @default(0)
   available Int    @default(0)
-  sell      Int    @default(0)
+  sold      Int    @default(0)
   defect    Int    @default(0)
   returned  Int    @default(0)
 }
@@ -130,6 +145,8 @@ model OrderItem {
   id          Int       @id @default(autoincrement())
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  author                User            @relation("CreatedOrderItems", fields: [authorId], references: [id])
+  authorId              Int
   product     Product   @relation(fields: [productId], references: [id])
   productId   Int
   stockItem   StockItem @relation(fields: [stockItemId], references: [id])
@@ -151,19 +168,22 @@ model Order {
 
   author                User            @relation("CreatedOrders", fields: [authorId], references: [id])
   authorId              Int
+  targetUser            User            @relation("OrderTargetUser", fields: [targetUserId], references: [id])
+  targetUserId          Int
   transaction           Transaction?
   delay                 Delay?          @relation(fields: [delayId], references: [id])
   delayId               Int?
-  orderItems            OrderItem[]
-  stockItems            StockItem[]
+  orderItems            OrderItem[]     
+  stockItems            StockItem[]     @relation("StockItems")
 
   orderType             OrderType
+  orderStatus           OrderStatus
   itemDiscount          Decimal         @default(0)
   tax                   Int             @default(0)
   shipping              Decimal         @default(0)
-  subTotal              Decimal
-  total                 Decimal
-  grandTotal            Decimal
+  total                 Decimal         @default(0)
+  subTotal              Decimal         @default(0)
+  grandTotal            Decimal         @default(0)
   discount              Int             @default(0)
   promo                 String?
   description           String?         @db.Text
@@ -195,6 +215,7 @@ model Transaction {
   type                  TransactionType
   status                TransactionStatus
   paymentMethod         PaymentMethod
+  nominal               Decimal
 
   order                 Order?                  @relation(fields: [orderId], references: [id])
   orderId               Int?

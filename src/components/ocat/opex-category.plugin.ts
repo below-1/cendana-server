@@ -1,12 +1,12 @@
 import { FastifyInstance } from 'fastify'
-import * as handler from './product-category.handler'
-import * as DTO from './product-category.dto'
+import * as handler from './opex-category.handler'
+import * as DTO from './opex-category.dto'
 import { ID }  from '@cend/commons/request';
 
 export async function plugin(fastify: FastifyInstance) {
   fastify.post('/', {
     schema: {
-      tags: ['product-categories'],
+      tags: ['opex-categories'],
       body: DTO.Create.Obj,
       response: {
         200: ID.Obj
@@ -17,7 +17,7 @@ export async function plugin(fastify: FastifyInstance) {
 
   fastify.put('/:id', {
     schema: {
-      tags: ['product-categories'],
+      tags: ['opex-categories'],
       params: ID.Obj,
       body: DTO.Update.Obj
     },
@@ -26,17 +26,9 @@ export async function plugin(fastify: FastifyInstance) {
 
   fastify.delete('/:id', {
     schema: {
-      tags: ['product-categories'],
+      tags: ['opex-categories'],
       params: ID.Obj,
     },
     handler: handler.remove
-  })
-
-  fastify.get('/', {
-    schema: {
-      tags: ['product-categories'],
-      querystring: DTO.Find.Obj
-    },
-    handler: handler.find
   })
 }

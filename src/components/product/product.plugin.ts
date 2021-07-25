@@ -32,4 +32,20 @@ export async function plugin(fastify: FastifyInstance) {
     },
     handler: handler.remove
   })
+
+  fastify.get('/:id', {
+    schema: {
+      tags: ['products'],
+      params: ID.Obj
+    },
+    handler: handler.getById
+  })
+
+  fastify.get('/', {
+    schema: {
+      tags: ['products'],
+      querystring: DTO.Find.Obj
+    },
+    handler: handler.get
+  })
 }

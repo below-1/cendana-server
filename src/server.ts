@@ -30,8 +30,11 @@ export function createServer() {
   // server.register(prisma)
   server.register(components.auth.plugin, { prefix: '/auth' })
   server.register(components.productCategory.plugin, { prefix: '/v1/api/product-categories' })
+  server.register(components.opexCategory.plugin, { prefix: '/v1/api/opex-categories' })
   server.register(components.product.plugin, { prefix: '/v1/api/products' })
   server.register(components.user.plugin, { prefix: '/v1/api/users' })
+  server.register(components.purchase.plugin, { prefix: '/v1/api/purchases' })
+  server.register(components.stockItem.plugin, { prefix: '/v1/api/stock-items' })
 
   return server
 }

@@ -1,5 +1,6 @@
 import { Static, Type } from '@sinclair/typebox'
 import { ID } from '@cend/commons/request'
+import { FindOptions } from '@cend/commons/find';
 
 export namespace Create {
   export const Obj = Type.Object({
@@ -17,5 +18,16 @@ export namespace Update {
     name: Type.String(),
     unit: Type.String()
   })
+  export type Marker = Static<typeof Obj>;
+}
+
+export namespace Find {
+  export const Obj = Type.Intersect([
+    Type.Object({
+      keyword: Type.String({ default: '' })
+    }),
+    FindOptions.Obj
+  ])
+
   export type Marker = Static<typeof Obj>;
 }

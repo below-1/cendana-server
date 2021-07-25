@@ -31,12 +31,28 @@ export async function plugin(fastify: FastifyInstance) {
     handler: CustomerHandlers.remove
   })
 
+  fastify.get('/customers', {
+    schema: {
+      tags: ['customers'],
+      querystring: DTO.Find.Obj
+    },
+    handler: CustomerHandlers.getMany
+  })
+
   fastify.post('/suppliers', {
     schema: {
       tags: ['suppliers'],
       body: DTO.Supplier.Create.Obj
     },
     handler: SupplierHandlers.post
+  })
+
+  fastify.get('/suppiers', {
+    schema: {
+      tags: ['suppliers'],
+      querystring: DTO.Find.Obj
+    },
+    handler: SupplierHandlers.getMany
   })
 
   fastify.put('/suppliers/:id', {

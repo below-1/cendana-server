@@ -1,6 +1,7 @@
 import { prisma } from '@cend/commons/prisma';
-import { Role } from '@prisma/client';
+import { Role, Prisma } from '@prisma/client';
 import * as DTO from './user.dto';
+import { FindOptions } from '@cend/commons/find';
 
 export async function create(payload: DTO.Create.Marker) {
   const user = await prisma.user.create({
@@ -36,4 +37,35 @@ export async function findOneUserByUsername(username: string) {
     }
   });
   return result;
+}
+
+export async function findUser(role: Role, keyword: string, options: FindOptions.Marker) {
+  const totalData = await prisma.user.count({
+    where: {
+      AND: [
+        { role },
+        { name: { contains: keyword } }
+      ]
+    }
+  });
+  const totalPage = Math.ceil(totalData / options.perPage);
+  const offset = options.page * options.perPage;
+  const items = await prisma.user.findMany({
+    where: {
+      AND: [
+        { role },
+        { name: { contains: keyword } }
+      ]
+    },
+    skip: offset,
+    take: options.perPage,
+    orderBy: {
+      name: 'desc'
+    }
+  })
+  return {
+    totalData,
+    totalPage,
+    items
+  }
 }

@@ -22,7 +22,9 @@
     "fastify-jwt": "^3.0.0",
     "fastify-plugin": "^3.0.0",
     "fastify-swagger": "^4.8.3",
+    "fluent-json-schema": "^3.0.1",
     "jsonwebtoken": "^8.5.1",
+    "knex": "^0.95.7",
     "module-alias": "^2.2.2"
   },
   "devDependencies": {
