@@ -198,7 +198,7 @@ model Delay {
   authorId              Int
   type                  DelayType
   order                 Order?
-  transaction           Transaction?
+  transactions           Transaction[]
 
   dueDate               DateTime
   total                 Decimal

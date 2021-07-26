@@ -35,6 +35,7 @@ export function createServer() {
   server.register(components.user.plugin, { prefix: '/v1/api/users' })
   server.register(components.purchase.plugin, { prefix: '/v1/api/purchases' })
   server.register(components.stockItem.plugin, { prefix: '/v1/api/stock-items' })
+  server.register(components.delay.plugin, { prefix: '/v1/api/delay' })
 
   return server
 }

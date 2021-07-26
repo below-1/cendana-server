@@ -17,7 +17,7 @@ import { findPurchaseById } from './purchase.view'
 import * as productViews from '../product/product.view';
 import * as productServices from '../product/product.service';
 import { repo as transactionRepo } from '../trans'
-import { repo as delayRepo } from '../delay'
+import { delayRepo as delayRepo } from '../delay'
 
 export async function create(payload: DTO.Create.Marker) {
   const { authorId, targetUserId, ...rest } = payload;

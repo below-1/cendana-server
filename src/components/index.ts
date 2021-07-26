@@ -5,3 +5,4 @@ export * as user from './user';
 export * as auth from './auth';
 export * as purchase from './purchase';
 export * as stockItem from './sitem';
+export * as delay from './delay';
