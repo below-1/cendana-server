@@ -1,7 +1,7 @@
 import { prisma } from '@cend/commons/prisma';
-import { Order, StockItem, OrderStatus, OrderType } from '@prisma/client';
+import { OrderType } from '@prisma/client';
 
-export async function findPurchaseById(id: number) {
+export async function findById(id: number) {
   const purchase = await prisma.order.findFirst({
     where: {
       AND: [

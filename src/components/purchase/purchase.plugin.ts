@@ -13,14 +13,6 @@ export async function plugin(fastify: FastifyInstance) {
     handler: handler.post
   })
 
-  fastify.get('/:id/totals', {
-    schema: {
-      tags: ['purchases'],
-      params: ID.Obj
-    },
-    handler: handler.getCurrentPurchaseTotals
-  })
-
   fastify.get('/:id', {
     schema: {
       tags: ['purchases'],
