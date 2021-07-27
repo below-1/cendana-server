@@ -30,4 +30,12 @@ export async function plugin(fastify: FastifyInstance) {
     handler: handler.seal
   })
 
+  fastify.delete('/:id', {
+    schema: {
+      tags: ['purchases'],
+      params: ID.Obj
+    },
+    handler: handler.remove
+  })
+
 }
