@@ -7,10 +7,10 @@ import {
   TransactionType, 
   PaymentMethod 
 } from '@prisma/client';
-import { findForOrder } from '../../sitem/stock-item.view'
+import { services as stockItemServices } from '@cend/components/sitem';
+import { services as delayServices } from '@cend/components/delay';
 import * as productServices from '../../product/product.service';
-import { repo as transactionRepo } from '../../trans'
-import { delayRepo as delayRepo } from '../../delay'
+import { services as transactionServices } from '../../trans'
 
 type DelayData = {
   dueDate: string;
@@ -36,7 +36,7 @@ export async function sealTransaction(payload: SealTransactionPayload) {
   if (!order) {
     throw new Error(`can't find purchase with id=${orderId}`);
   }
-  const stockItems = await findForOrder(orderId);
+  const stockItems = await stockItemServices.findForOrder(orderId);
   for (let stockItem of stockItems) {
     await productServices.updateStocks(stockItem.productId);
   }
@@ -48,7 +48,7 @@ export async function sealTransaction(payload: SealTransactionPayload) {
       orderStatus: OrderStatus.SEALED
     }
   })
-  const transaction = await transactionRepo.create({
+  const transaction = await transactionServices.create({
     orderId: result.id,
     authorId: payload.authorId,
     type: TransactionType.CREDIT,
@@ -60,7 +60,7 @@ export async function sealTransaction(payload: SealTransactionPayload) {
     if (!payload.delay) {
       throw new Error(`Due Date of payment is not provided`);
     }
-    await delayRepo.create({
+    await delayServices.create({
       authorId: payload.authorId,
       type: DelayType.PAYABLE,
       orderId,
