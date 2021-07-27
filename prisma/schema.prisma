@@ -8,6 +8,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["referentialActions"]
 }
 
 enum Role {
@@ -126,7 +127,7 @@ model StockItem {
   authorId                  Int
   product                   Product                      @relation(fields: [productId], references: [id])
   productId                 Int
-  order                     Order           @relation("StockItems", fields: [orderId], references: [id])
+  order                     Order           @relation("StockItems", fields: [orderId], references: [id], onDelete: Cascade)
   orderId                   Int
   orderItems                OrderItem[]
 
