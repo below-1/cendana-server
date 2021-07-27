@@ -1,14 +1,6 @@
 import { prisma } from '@cend/commons/prisma';
 import { Decimal } from '@prisma/client/runtime';
-import * as paymentViews from './payment.view';
-
-export async function getCurrentPaid(id: number) {
-  const payments = await paymentViews.findForDelay(id);
-  const currentPaid = payments
-    .map(pay => pay.nominal)
-    .reduce((a, b) => a.plus(b), new Decimal('0'));
-  return currentPaid;
-}
+import { getCurrentPaid }  from './get-current-paid.service';
 
 export async function updateStatus(id: number) {
   const delay = await prisma.delay.findFirst({

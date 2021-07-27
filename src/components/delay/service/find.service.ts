@@ -1,10 +1,5 @@
 import { prisma } from '@cend/commons/prisma';
-import * as DTO from './delay.dto';
-
-export async function findOne(id: number) {
-  const delay = await prisma.delay.findFirst({ where: { id } });
-  return delay;
-}
+import * as DTO from '../delay.dto';
 
 export async function find(options: DTO.Find.Marker) {
   let conditions = []

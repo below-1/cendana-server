@@ -4,10 +4,10 @@ import {
   PaymentMethod
 } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime';
-import { repo as transactionRepo } from '../trans';
-import * as paymentViews from './payment.view';
-import * as delayViews from './delay.view';
-import * as delayServices from './delay.service';
+import { repo as transactionRepo } from '../../trans';
+import { findOne } from './find-one.service';
+import { findPayments } from './find-payments.service';
+import { updateStatus } from './update-status.service';
 
 export type AddPaymentPayload = {
   authorId: number;
@@ -19,7 +19,7 @@ export type AddPaymentPayload = {
 };
 
 export async function add(payload: AddPaymentPayload) {
-  const delay = await delayViews.findOne(payload.delayId);
+  const delay = await findOne(payload.delayId);
 
   if (!delay) {
     throw new Error(`Can't find Delay(id=${payload.delayId})`);
@@ -28,7 +28,7 @@ export async function add(payload: AddPaymentPayload) {
     throw new Error(`Delay(id=${payload.delayId}) already complete`);
   }
 
-  const previousPayments = await paymentViews.findForDelay(delay.id);
+  const previousPayments = await findPayments(delay.id);
   const currentPaid = previousPayments
     .map(pay => pay.nominal)
     .reduce((a, b) => a.plus(b), new Decimal('0'));
@@ -45,6 +45,6 @@ export async function add(payload: AddPaymentPayload) {
     type: TransactionType.CREDIT
   });
 
-  await delayServices.updateStatus(delay.id);
+  await updateStatus(delay.id);
   return transaction;
 }
