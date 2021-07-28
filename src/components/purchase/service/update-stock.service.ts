@@ -5,11 +5,11 @@ import {
 } from '@prisma/client';
 import { findById } from './find-by-id';
 import { calculateTotal } from './calculate-total.service';
-import { findForOrder } from '../../sitem/stock-item.view'
+import { services as stockItemServices } from '@cend/components/sitem';
 
 export async function updateStock(id: number) {
   const purchase = await findById(id);
-  const stockItems = await findForOrder(id);
+  const stockItems = await stockItemServices.findForOrder(id);
   const totals = await calculateTotal(purchase, stockItems);
   const result = await prisma.order.update({
     where: {

@@ -4,7 +4,7 @@ import {
   PaymentMethod
 } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime';
-import { repo as transactionRepo } from '../../trans';
+import { services as transactionServices } from '@cend/components/trans';
 import { findOne } from './find-one.service';
 import { findPayments } from './find-payments.service';
 import { updateStatus } from './update-status.service';
@@ -40,7 +40,7 @@ export async function add(payload: AddPaymentPayload) {
     throw new Error(`Payment is greater than required`);
   }
 
-  const transaction = await transactionRepo.create({
+  const transaction = await transactionServices.create({
     ...payload,
     type: TransactionType.CREDIT
   });

@@ -18,7 +18,7 @@ export namespace Update {
 export namespace Find {
   export const Obj = Type.Intersect([
     Type.Object({
-      keyword: Type.String({ default: '' })
+      keyword: Type.Optional(Type.String())
     }),
     FindOptions.Obj
   ]);

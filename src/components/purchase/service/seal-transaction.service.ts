@@ -9,7 +9,7 @@ import {
 } from '@prisma/client';
 import { services as stockItemServices } from '@cend/components/sitem';
 import { services as delayServices } from '@cend/components/delay';
-import * as productServices from '../../product/product.service';
+import { services as productServices } from '@cend/components/product';
 import { services as transactionServices } from '../../trans'
 
 type DelayData = {

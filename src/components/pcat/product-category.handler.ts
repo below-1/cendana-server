@@ -1,6 +1,11 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
-import * as repo from './product-category.repo';
-import * as views from './product-category.view';
+import {
+  create,
+  update,
+  remove as removeProductCategory,
+  find as findProductCategory,
+  findOne as findOneProductCategory
+} from './service';
 import * as DTO from './product-category.dto'
 import { ID } from '@cend/commons/request';
 
@@ -11,31 +16,32 @@ type FindRequest = FastifyRequest<{ Querystring: DTO.Find.Marker }>;
 type FindOneRequest = FastifyRequest<{ Params: ID.Marker }>;
 
 export async function post(request: PostRequest, reply: FastifyReply) {
-  const result = await repo.create(request.body);
+  const result = await create(request.body);
   reply.send(result);
 }
 
 export async function put(request: PutRequest, reply: FastifyReply) {
   const { id } = request.params;
   const payload = request.body;
-  const result = await repo.update(id, payload);
+  const result = await update(id, payload);
   reply.send(result);
 }
 
 export async function remove(request: DeleteRequest, reply: FastifyReply) {
   const { id } = request.params;
-  const result = await repo.remove(id);
+  const result = await removeProductCategory(id);
   reply.send(result);
 }
 
 export async function find(request: FindRequest, reply: FastifyReply) {
   const { keyword, ...options } = request.query;
-  const result = await views.find(keyword, options);
+  let _keyword = keyword ? keyword : '';
+  const result = await findProductCategory(_keyword, options);
   reply.send(result);
 }
 
 export async function findOne(request: FindOneRequest, reply: FastifyReply) {
-  const productCategory = await views.findOne(request.params.id);
+  const productCategory = await findOneProductCategory(request.params.id);
   if (!productCategory) {
     throw new Error(`can't find ProductCategory(id=${request.params.id})`);
   }

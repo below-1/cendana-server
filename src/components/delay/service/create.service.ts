@@ -12,13 +12,16 @@ export type CreatePayload = {
 }
 
 export async function create(payload: CreatePayload) {
-  const { orderId, ...rest } = payload;
+  const { authorId, orderId, ...rest } = payload;
   const delay = await prisma.delay.create({
     data: {
       ...rest,
       complete: false,
       order: {
         connect: { id: orderId }
+      },
+      author: {
+        connect: { id: authorId }
       }
     }
   });

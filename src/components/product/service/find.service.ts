@@ -1,11 +1,6 @@
 import { prisma } from '@cend/commons/prisma';
 import { FindOptions } from '@cend/commons/find';
 
-export async function findOne(id: number) {
-  const product = await prisma.product.findFirst({ where: { id } });
-  return product;
-}
-
 export async function find(keyword: string, options: FindOptions.Marker) {
   const totalData = await prisma.product.count({
     where: {
