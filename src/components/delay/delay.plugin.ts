@@ -3,6 +3,7 @@ import * as delayHandlers from './delay.handler';
 import * as paymentHandlers from './payment.handler';
 import { ID } from '@cend/commons/request';
 import * as DelayDTO from './delay.dto';
+import * as PaymentDTO from './payment.dto';
 
 export async function plugin(fastify: FastifyInstance) {
   fastify.get('/', {
@@ -27,5 +28,13 @@ export async function plugin(fastify: FastifyInstance) {
       params: ID.Obj
     },
     handler: paymentHandlers.getPayments
+  })
+  fastify.post('/:id/payments', {
+    schema: {
+      tags: ['delay'],
+      params: ID.Obj,
+      body: PaymentDTO.Create.Obj
+    },
+    handler: paymentHandlers.postPayment
   })
 }

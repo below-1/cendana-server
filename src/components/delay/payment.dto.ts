@@ -6,6 +6,7 @@ import {
 
 export namespace Create {
   export const Obj = Type.Object({
+    authorId: Type.Number(),
     nominal: Type.String(),
     createdAt: Type.String({ format: 'date-time' }),
     status: Type.Enum(TransactionStatus),

@@ -18,7 +18,7 @@ export type AddPaymentPayload = {
   paymentMethod: PaymentMethod;
 };
 
-export async function add(payload: AddPaymentPayload) {
+export async function addPayment(payload: AddPaymentPayload) {
   const delay = await findOne(payload.delayId);
 
   if (!delay) {
