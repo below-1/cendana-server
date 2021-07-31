@@ -236,7 +236,7 @@ model Opex {
   updatedAt             DateTime                @updatedAt
   title                 String                  @db.VarChar(255)
   description           String?                 @db.Text
-  transaction           Transaction?
+  transactions          Transaction[]
 }
 
 model Tool {
@@ -245,5 +245,5 @@ model Tool {
   updatedAt             DateTime                @updatedAt
   title                 String                  @db.VarChar(255)
   description           String?                 @db.Text
-  transaction           Transaction?
+  transaction           Transaction[]
 }

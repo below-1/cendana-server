@@ -7,12 +7,7 @@ export async function update(id: number, payload: DTO.Update.Marker) {
   const opex = await prisma.opex.update({
     where: { id },
     data: {
-      title,
-      transaction: {
-        update: {
-           ...rest
-        }
-      }
+      title
     }
   });
   return opex;

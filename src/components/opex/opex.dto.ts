@@ -5,10 +5,10 @@ import { FindOptions } from '@cend/commons/find';
 export namespace Create {
   export const Obj = Type.Object({
     title: Type.String(),
-    authorId: Type.Number(),
-    nominal: Type.String(),
-    status: Type.Enum(TransactionStatus),
-    paymentMethod: Type.Enum(PaymentMethod)
+    // authorId: Type.Number(),
+    // nominal: Type.String(),
+    // status: Type.Enum(TransactionStatus),
+    // paymentMethod: Type.Enum(PaymentMethod)
   });
   export type Marker = Static<typeof Obj>;
 }
@@ -16,9 +16,9 @@ export namespace Create {
 export namespace Update {
   export const Obj = Type.Object({
     title: Type.String(),
-    nominal: Type.String(),
-    status: Type.Enum(TransactionStatus),
-    paymentMethod: Type.Enum(PaymentMethod)
+    // nominal: Type.String(),
+    // status: Type.Enum(TransactionStatus),
+    // paymentMethod: Type.Enum(PaymentMethod)
   });
   export type Marker = Static<typeof Obj>;
 }
@@ -31,5 +31,23 @@ export namespace Find {
     FindOptions.Obj
   ])
 
+  export type Marker = Static<typeof Obj>;
+}
+
+export namespace AddTransaction {
+  export const Obj = Type.Object({
+    authorId: Type.Number(),
+    nominal: Type.String(),
+    status: Type.Enum(TransactionStatus),
+    paymentMethod: Type.Enum(PaymentMethod)
+  })
+  export type Marker = Static<typeof Obj>;
+}
+
+export namespace RemoveTransaction {
+  export const Obj = Type.Object({
+    id: Type.Number(),
+    transactionId: Type.Number()
+  });
   export type Marker = Static<typeof Obj>;
 }

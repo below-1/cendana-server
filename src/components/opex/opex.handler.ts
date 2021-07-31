@@ -6,7 +6,9 @@ import {
   update,
   remove as removeOpex,
   find,
-  findOne
+  findOne,
+  addTransaction,
+  removeTransaction
 } from './service';
 
 type PostRequest = Request<{ Body: DTO.Create.Marker }>;
@@ -14,6 +16,14 @@ type PutRequest = Request<{ Body: DTO.Update.Marker, Params: ID.Marker }>;
 type DeleteRequest = Request<{ Params: ID.Marker }>;
 type GetByIdRequest = Request<{ Params: ID.Marker }>;
 type GetRequest = Request<{ Querystring: DTO.Find.Marker }>;
+type AddTransactionRequest = Request<{ Params: ID.Marker, Body: DTO.AddTransaction.Marker }>;
+
+type RemoveTransactionParams = {
+  id: number;
+  transactionId: number;
+}
+
+type RemoveTransactionRequest = Request<{ Params: RemoveTransactionParams }>;
 
 export async function post(request: PostRequest, reply: Reply) {
   const result = await create(request.body);
@@ -46,4 +56,17 @@ export async function get(request: GetRequest, reply: Reply) {
   const { keyword, ...options } = request.query;
   const result = await find(keyword, options);
   reply.send(result);
+}
+
+export async function postTransaction(request: AddTransactionRequest, reply: Reply) {
+  const { id } = request.params;
+  const payload = request.body;
+  const result = await addTransaction(id, payload);
+  reply.send(result);
+}
+
+export async function deleteTransaction(request: RemoveTransactionRequest, reply: Reply) {
+  const { id, transactionId } = request.params;
+  await removeTransaction(id, transactionId);
+  reply.send({ status: 'OK' });
 }

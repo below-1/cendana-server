@@ -3,3 +3,5 @@ export * from './find-one.service';
 export * from './find.service';
 export * from './remove.service';
 export * from './update.service';
+export * from './add-transaction.service';
+export * from './remove-transaction.service';

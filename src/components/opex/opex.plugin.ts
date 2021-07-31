@@ -48,4 +48,19 @@ export async function plugin(fastify: FastifyInstance) {
     },
     handler: handler.get
   })
+
+  fastify.post('/:id/transactions', {
+    handler: handler.postTransaction,
+    schema: {
+      body: DTO.AddTransaction.Obj,
+      params: ID.Obj
+    }
+  })
+
+  fastify.delete('/:id/transactions/:transactionId', {
+    handler: handler.deleteTransaction,
+    schema: {
+      params: DTO.RemoveTransaction.Obj
+    }
+  })
 }
