@@ -8,12 +8,13 @@ export async function find(keyword: string, options: FindOptions.Marker) {
     }
   };
   const totalData = await prisma.productCategory.count({ where });
-  const totalPage = Math.ceil(totalData / options.perPage);
+  let perPage = options.perPage == -1 ? totalData : options.perPage;
+  const totalPage = Math.ceil(totalData / perPage);
   const offset = options.perPage * options.page;
   const items = await prisma.productCategory.findMany({
     where,
     skip: offset,
-    take: options.perPage,
+    take: perPage,
     orderBy: {
       title: 'asc'
     }

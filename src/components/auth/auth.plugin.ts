@@ -16,4 +16,8 @@ export async function plugin(fastify: FastifyInstance) {
     },
     handler: handlers.signup
   })
+
+  fastify.get('/me', {
+    handler: handlers.currentUser
+  })
 }

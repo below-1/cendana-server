@@ -47,7 +47,7 @@ export async function plugin(fastify: FastifyInstance) {
     handler: SupplierHandlers.post
   })
 
-  fastify.get('/suppiers', {
+  fastify.get('/suppliers', {
     schema: {
       tags: ['suppliers'],
       querystring: DTO.Find.Obj

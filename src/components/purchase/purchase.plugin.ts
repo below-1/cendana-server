@@ -21,6 +21,14 @@ export async function plugin(fastify: FastifyInstance) {
     handler: handler.getOne
   })
 
+  fastify.get('/', {
+    schema: {
+      tags: ['purchases'],
+      querystring: DTO.Find.Obj
+    },
+    handler: handler.find
+  })
+
   fastify.put('/:id/seal', {
     schema: {
       tags: ['purchases'],

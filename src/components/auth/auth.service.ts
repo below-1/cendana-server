@@ -1,8 +1,10 @@
 import { Role } from '@prisma/client';
 import * as DTO from './auth.dto';
-import { repo as userRepo } from '@cend/components/user';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import {
+  services as userServices
+} from '@cend/components/user';
 
 class LoginError extends Error {
   constructor(message: string) {
@@ -12,7 +14,7 @@ class LoginError extends Error {
 }
 
 export async function login(payload: DTO.Login.Marker) {
-  const user = await userRepo.findOneUserByUsername(payload.username);
+  const user = await userServices.findOneUserByUsername(payload.username);
   if (!user) {
     throw new LoginError('USER_NOT_FOUND');
   }
@@ -35,5 +37,11 @@ export async function signup(payload: DTO.SignUp.Marker) {
     password: hashedPassword,
     role: Role.ADMIN
   };
-  await userRepo.create(realPayload);
+  await userServices.create(realPayload);
+}
+
+export async function currentUser(token: string) {
+  const authObject: any = await jwt.verify(token, process.env.JWT_SECRET!);
+  const user = await userServices.findOneUserByUsername(authObject.username);
+  return user;
 }

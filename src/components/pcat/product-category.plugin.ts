@@ -24,6 +24,14 @@ export async function plugin(fastify: FastifyInstance) {
     handler: handler.put
   })
 
+  fastify.get('/:id', {
+    schema: {
+      tags: ['product-categories'],
+      params: ID.Obj
+    },
+    handler: handler.findOne
+  })
+
   fastify.delete('/:id', {
     schema: {
       tags: ['product-categories'],

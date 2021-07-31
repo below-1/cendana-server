@@ -16,7 +16,10 @@ export namespace Create {
 export namespace Update {
   export const Obj = Type.Object({
     name: Type.String(),
-    unit: Type.String()
+    unit: Type.String(),
+    categories: Type.Array(Type.Object({
+      id: Type.Number()
+    }))
   })
   export type Marker = Static<typeof Obj>;
 }

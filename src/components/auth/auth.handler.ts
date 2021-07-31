@@ -7,10 +7,24 @@ type SignupRequest = Request<{ Body: DTO.SignUp.Marker }>;
 
 export async function login(request: LoginRequest, reply: Reply) {
   const token = await services.login(request.body);
-  reply.send(token);
+  reply.send({ token });
 }
 
 export async function signup(request: SignupRequest, reply: Reply) {
   await services.signup(request.body);
   reply.send();
+}
+
+export async function currentUser(request: Request, reply: Reply) {
+  const authHeader = request.headers.authorization;
+  if (!authHeader) {
+    reply.status(400).send({
+      message: 'authorization header not provided'
+    });
+    return;
+  }
+  const token = authHeader!.split(' ')[1];
+  console.log(token);
+  const user = await services.currentUser(token);
+  reply.send(user);
 }

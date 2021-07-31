@@ -11,7 +11,7 @@ export async function find(keyword: string, options: FindOptions.Marker) {
   })
   const totalPage = Math.ceil(totalData / options.perPage);
   const offset = options.perPage * options.page;
-  const items = await prisma.user.findMany({
+  const items = await prisma.product.findMany({
     where: {
       name: {
         contains: keyword

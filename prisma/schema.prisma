@@ -65,14 +65,6 @@ model ProductCategory {
   products  Product[]
 }
 
-model OpexCategory {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String   @db.VarChar(255)
-  opexes    Opex[]
-}
-
 model ToolsCategory {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
@@ -234,6 +226,8 @@ model Transaction {
   delayId Int?
   opex                  Opex?                    @relation(fields: [opexId], references: [id], onDelete: Cascade)
   opexId                Int?
+  tool                  Tool?                    @relation(fields: [toolId], references: [id], onDelete: Cascade)
+  toolId                Int?
 }
 
 model Opex {
@@ -241,7 +235,15 @@ model Opex {
   createdAt             DateTime                @default(now())
   updatedAt             DateTime                @updatedAt
   title                 String                  @db.VarChar(255)
-  category              OpexCategory[]
+  description           String?                 @db.Text
+  transaction           Transaction?
+}
+
+model Tool {
+  id                    Int                     @id @default(autoincrement())
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  title                 String                  @db.VarChar(255)
   description           String?                 @db.Text
   transaction           Transaction?
 }
