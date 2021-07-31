@@ -5,6 +5,7 @@ import * as handlers from './auth.handler';
 export async function plugin(fastify: FastifyInstance) {
   fastify.post('/login', {
     schema: {
+      tags: ['auth'],
       body: DTO.Login.Obj
     },
     handler: handlers.login
@@ -12,12 +13,16 @@ export async function plugin(fastify: FastifyInstance) {
 
   fastify.post('/signup', {
     schema: {
+      tags: ['auth'],
       body: DTO.SignUp.Obj
     },
     handler: handlers.signup
   })
 
   fastify.get('/me', {
+    schema: {
+      tags: ['auth']
+    },
     handler: handlers.currentUser
   })
 }

@@ -11,12 +11,14 @@ import {
 export async function plugin(fastify: FastifyInstance) {
   fastify.post('/', {
     schema: {
+      tags: ['order-items'],
       body: DTO.Create.Obj
     },
     handler: handlers.post
   })
   fastify.put('/:id', {
     schema: {
+      tags: ['order-items'],
       params: ID.Obj,
       body: DTO.Update.Obj
     },
@@ -24,12 +26,14 @@ export async function plugin(fastify: FastifyInstance) {
   })
   fastify.delete('/:id', {
     schema: {
+      tags: ['order-items'],
       params: ID.Obj
     },
     handler: handlers.remove
   })
   fastify.get('/', {
     schema: {
+      tags: ['order-items'],
       querystring: DTO.Find.Obj
     },
     handler: handlers.find

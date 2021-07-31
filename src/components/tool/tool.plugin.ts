@@ -7,12 +7,14 @@ export async function plugin(fastify: FastifyInstance) {
   fastify.post('/', {
     handler: handler.post,
     schema: {
+      tags: ['tools'],
       body: DTO.Create.Obj
     }
   })
   fastify.put('/:id', {
     handler: handler.put,
     schema: {
+      tags: ['tools'],
       params: ID.Obj,
       body: DTO.Update.Obj
     }

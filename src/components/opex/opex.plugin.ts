@@ -7,7 +7,7 @@ export async function plugin(fastify: FastifyInstance) {
 
   fastify.post('/', {
     schema: {
-      tags: ['products'],
+      tags: ['operating-expenses'],
       body: DTO.Create.Obj,
       response: {
         200: ID.Obj
@@ -18,7 +18,7 @@ export async function plugin(fastify: FastifyInstance) {
 
   fastify.put('/:id', {
     schema: {
-      tags: ['products'],
+      tags: ['operating-expenses'],
       body: DTO.Update.Obj,
       params: ID.Obj
     },
@@ -27,7 +27,7 @@ export async function plugin(fastify: FastifyInstance) {
 
   fastify.delete('/:id', {
     schema: {
-      tags: ['products'],
+      tags: ['operating-expenses'],
       params: ID.Obj
     },
     handler: handler.remove
@@ -35,7 +35,7 @@ export async function plugin(fastify: FastifyInstance) {
 
   fastify.get('/:id', {
     schema: {
-      tags: ['products'],
+      tags: ['operating-expenses'],
       params: ID.Obj
     },
     handler: handler.getById
@@ -43,7 +43,7 @@ export async function plugin(fastify: FastifyInstance) {
 
   fastify.get('/', {
     schema: {
-      tags: ['products'],
+      tags: ['operating-expenses'],
       querystring: DTO.Find.Obj
     },
     handler: handler.get
@@ -52,6 +52,7 @@ export async function plugin(fastify: FastifyInstance) {
   fastify.post('/:id/transactions', {
     handler: handler.postTransaction,
     schema: {
+      tags: ['operating-expenses'],
       body: DTO.AddTransaction.Obj,
       params: ID.Obj
     }
@@ -60,6 +61,7 @@ export async function plugin(fastify: FastifyInstance) {
   fastify.delete('/:id/transactions/:transactionId', {
     handler: handler.deleteTransaction,
     schema: {
+      tags: ['operating-expenses'],
       params: DTO.RemoveTransaction.Obj
     }
   })
