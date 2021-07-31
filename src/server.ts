@@ -38,6 +38,7 @@ export function createServer() {
   server.register(components.orderItem.plugin, { prefix: '/v1/api/order-items' })
   server.register(components.delay.plugin, { prefix: '/v1/api/delay' })
   server.register(components.opex.plugin, { prefix: '/v1/api/opexes' })
+  server.register(components.tool.plugin, { prefix: '/v1/api/tools' })
 
   return server
 }
