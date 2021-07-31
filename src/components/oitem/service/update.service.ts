@@ -34,8 +34,9 @@ export async function update(id: number, payload: UpdatePayload) {
     throw new Error(`Sale(id=${orderId}) is not OPEN`);
   }
 
-  prisma.orderItem.update({
+  const result = await prisma.orderItem.update({
     where: { id },
     data: payload
-  })
+  });
+  return result;
 }

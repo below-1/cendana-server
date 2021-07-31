@@ -13,7 +13,7 @@ export type CreatePayload = {
 
 export async function create(payload: CreatePayload) {
   const { authorId, orderId, ...rest } = payload;
-  const statement = prisma.delay.create({
+  return prisma.delay.create({
     data: {
       ...rest,
       complete: false,
@@ -25,5 +25,4 @@ export async function create(payload: CreatePayload) {
       }
     }
   });
-  return statement;
 }

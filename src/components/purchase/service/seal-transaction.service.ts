@@ -99,5 +99,5 @@ export async function sealTransaction(payload: SealTransactionPayload) {
     statements.push(createDelayStatement);
   }
   
-  prisma.$transaction(statements);
+  await prisma.$transaction(statements);
 }

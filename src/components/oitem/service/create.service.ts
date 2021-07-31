@@ -40,7 +40,7 @@ export async function create(payload: CreatePayload) {
     sellPrice = rest.sellPrice;
   }
 
-  const orderItem = prisma.orderItem.create({
+  const orderItem = await prisma.orderItem.create({
     data: {
       ...rest,
       buyPrice,
