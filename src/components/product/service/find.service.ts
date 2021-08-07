@@ -9,8 +9,10 @@ export async function find(keyword: string, options: FindOptions.Marker) {
       }
     }
   })
-  const totalPage = Math.ceil(totalData / options.perPage);
-  const offset = options.perPage * options.page;
+  const perPage = options.perPage == -1 ? totalData : options.perPage;
+  const totalPage = Math.ceil(totalData / perPage);
+  const offset = perPage * options.page;
+
   const items = await prisma.product.findMany({
     where: {
       name: {
@@ -18,7 +20,7 @@ export async function find(keyword: string, options: FindOptions.Marker) {
       }
     },
     skip: offset,
-    take: options.perPage,
+    take: perPage,
     orderBy: {
       name: 'asc'
     }

@@ -10,9 +10,7 @@ export namespace Create {
     sellPrice: Type.Number(),
     quantity: Type.Number(),
     available: Type.Number(),
-    sold: Type.Number(),
-    defect: Type.Number(),
-    returned: Type.Number()
+    defect: Type.Number()
   })
 
   export type Marker = Static<typeof Obj>;

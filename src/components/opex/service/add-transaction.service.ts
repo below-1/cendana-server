@@ -8,7 +8,8 @@ export async function addTransaction(id: number, payload: DTO.AddTransaction.Mar
     data: {
       ...rest,
       type: TransactionType.CREDIT,
-      author: { connect: { id: authorId } }
+      author: { connect: { id: authorId } },
+      opex: { connect: { id } }
     }
   });
   return transaction;

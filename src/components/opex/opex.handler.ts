@@ -8,7 +8,8 @@ import {
   find,
   findOne,
   addTransaction,
-  removeTransaction
+  removeTransaction,
+  findTransactions
 } from './service';
 
 type PostRequest = Request<{ Body: DTO.Create.Marker }>;
@@ -16,6 +17,7 @@ type PutRequest = Request<{ Body: DTO.Update.Marker, Params: ID.Marker }>;
 type DeleteRequest = Request<{ Params: ID.Marker }>;
 type GetByIdRequest = Request<{ Params: ID.Marker }>;
 type GetRequest = Request<{ Querystring: DTO.Find.Marker }>;
+type GetTransactionRequest = Request<{ Querystring: DTO.Find.Marker }>;
 type AddTransactionRequest = Request<{ Params: ID.Marker, Body: DTO.AddTransaction.Marker }>;
 
 type RemoveTransactionParams = {
@@ -63,6 +65,13 @@ export async function postTransaction(request: AddTransactionRequest, reply: Rep
   const payload = request.body;
   const result = await addTransaction(id, payload);
   reply.send(result);
+}
+
+export async function getTransactions(request: GetTransactionRequest, reply: Reply) {
+  const options = request.query;
+  const { keyword, ...opts } = options
+  const result = await findTransactions(keyword, opts)
+  reply.send(result)
 }
 
 export async function deleteTransaction(request: RemoveTransactionRequest, reply: Reply) {

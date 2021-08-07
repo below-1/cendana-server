@@ -51,7 +51,10 @@ export async function sealTransaction(payload: SealTransactionPayload) {
       set 
         available = available + ${stockItem.available},
         defect = defect + ${stockItem.defect},
-        returned = returned + ${stockItem.returned}
+        returned = returned + ${stockItem.returned},
+        "buyPrice" = ${stockItem.buyPrice},
+        "sellPrice" = ${stockItem.sellPrice},
+        discount = ${stockItem.discount}
         where id = ${stockItem.productId}`);
     statements.push(syncProduct);
   }

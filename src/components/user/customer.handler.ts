@@ -6,7 +6,8 @@ import {
   create,
   update,
   remove as removeUser,
-  find
+  find,
+  findById
 } from './service';
 
 type PostRequest = Request<{ Body: DTO.Customer.Create.Marker }>;
@@ -15,7 +16,7 @@ type PutRequest = Request<{
   Body: DTO.Customer.Update.Marker
 }>;
 type DeleteRequest = Request<{ Params: ID.Marker }>;
-
+type GetOneRequest = Request<{ Params: ID.Marker }>;
 type FindRequest = {
 
 }
@@ -49,4 +50,10 @@ export async function getMany(request: GetManyRequest, reply: Reply) {
   const { keyword, ...options } = request.query;
   const result = await find(Role.CUSTOMER, keyword, options);
   reply.send(result);
+}
+
+export async function getOne(request: GetOneRequest, reply: Reply) {
+  const { id } = request.params
+  const result = await findById(id)
+  reply.send(result)
 }

@@ -39,6 +39,14 @@ export async function plugin(fastify: FastifyInstance) {
     handler: CustomerHandlers.getMany
   })
 
+  fastify.get('/customers/:id', {
+    schema: {
+      tags: ['customers'],
+      params: ID.Obj
+    },
+    handler: CustomerHandlers.getOne
+  })
+
   fastify.post('/suppliers', {
     schema: {
       tags: ['suppliers'],
@@ -53,6 +61,14 @@ export async function plugin(fastify: FastifyInstance) {
       querystring: DTO.Find.Obj
     },
     handler: SupplierHandlers.getMany
+  })
+
+  fastify.get('/suppliers/:id', {
+    schema: {
+      tags: ['suppliers'],
+      params: ID.Obj
+    },
+    handler: SupplierHandlers.getOne
   })
 
   fastify.put('/suppliers/:id', {

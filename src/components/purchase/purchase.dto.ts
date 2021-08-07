@@ -13,6 +13,18 @@ export namespace Create {
   export type Marker = Static<typeof Obj>;
 }
 
+export namespace Update {
+  export const Obj = Type.Object({
+    description: Type.Optional(Type.String()),
+    tax: Type.Number(),
+    discount: Type.Number(),
+    shipping: Type.String(),
+    targetUserId: Type.Number()
+  })
+
+  export type Marker = Static<typeof Obj>;
+}
+
 export namespace SealTransaction {
   export const Obj = Type.Object({
     authorId: Type.Number(),

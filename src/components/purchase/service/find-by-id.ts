@@ -8,6 +8,10 @@ export async function findById(id: number) {
         { id },
         { orderType: OrderType.BUY }
       ]
+    },
+    include: {
+      targetUser: true,
+      author: true
     }
   });
   if (!purchase) {

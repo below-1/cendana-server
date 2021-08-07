@@ -3,6 +3,7 @@ import {
   OrderStatus, 
   OrderType
 } from '@prisma/client';
+import { services as productServices } from '@cend/components/product'
 
 export async function remove(id: number) {
   const order = await prisma.order.findFirst({ where: { id } });
@@ -15,6 +16,14 @@ export async function remove(id: number) {
   if (order.orderStatus != OrderStatus.OPEN) {
     throw new Error(`Order(id=${id}) is not OPEN`);
   }
-  await prisma.order.delete({ where: { id } });
+  const orderItems = await prisma.orderItem.findMany({
+    where: {
+      orderId: id
+    }
+  })
+  await prisma.order.delete({ where: { id } })
+  const updateProductDataPromises = orderItems.map(item => 
+    productServices.updateStocks(item.productId))
+  await Promise.all(updateProductDataPromises)
   return order;
 }

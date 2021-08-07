@@ -6,7 +6,8 @@ import {
   create,
   update,
   remove as removeUser,
-  find
+  find,
+  findById
 } from './service';
 
 type PostRequest = Request<{ Body: DTO.Supplier.Create.Marker }>;
@@ -16,6 +17,7 @@ type PutRequest = Request<{
 }>;
 type DeleteRequest = Request<{ Params: ID.Marker }>
 type GetManyRequest = Request<{ Querystring: DTO.Find.Marker }>;
+type GetOneRequest = Request<{ Params: ID.Marker }>;
 
 export async function post(request: PostRequest, reply: Reply) {
   const body = request.body;
@@ -44,4 +46,10 @@ export async function getMany(request: GetManyRequest, reply: Reply) {
   const { keyword, ...options } = request.query;
   const result = await find(Role.SUPPLIER, keyword, options);
   reply.send(result);
+}
+
+export async function getOne(request: GetOneRequest, reply: Reply) {
+  const { id } = request.params
+  const result = await findById(id)
+  reply.send(result)
 }

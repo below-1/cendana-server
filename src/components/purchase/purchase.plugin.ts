@@ -13,6 +13,15 @@ export async function plugin(fastify: FastifyInstance) {
     handler: handler.post
   })
 
+  fastify.put('/:id', {
+    schema: {
+      tags: ['purchases'],
+      body: DTO.Update.Obj,
+      params: ID.Obj
+    },
+    handler: handler.put
+  })
+
   fastify.get('/:id', {
     schema: {
       tags: ['purchases'],
