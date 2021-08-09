@@ -11,8 +11,9 @@ export function calculateTotal(order: Order, stockItems: StockItem[]) {
     .reduce((a, b) => a.plus(b), new Decimal('0'));
 
     // TOTAL
+  const tax = new Decimal(order.tax / 100);
   const totalPlusShipping = subTotal.plus(order.shipping);
-  const totalPlusShippingAndTax = totalPlusShipping.plus(totalPlusShipping.mul(order.tax));
+  const totalPlusShippingAndTax = totalPlusShipping.plus(totalPlusShipping.mul(tax));
   const total = totalPlusShippingAndTax;
   
   // GRAND TOTAL
@@ -25,7 +26,6 @@ export function calculateTotal(order: Order, stockItems: StockItem[]) {
       return totalMinusDiscount
     })
     .reduce((a, b) => a.plus(b), new Decimal('0'));
-  const tax = new Decimal(order.tax).div(100)
   const taxedItemsDiscounted = itemsDiscountedTotal.plus( itemsDiscountedTotal.mul(tax))
   const itemsDiscountedPlusShipping = taxedItemsDiscounted.plus(order.shipping)
   const grandTotal = itemsDiscountedPlusShipping;

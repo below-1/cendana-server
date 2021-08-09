@@ -17,6 +17,7 @@ export namespace Update {
   export const Obj = Type.Object({
     name: Type.String(),
     unit: Type.String(),
+    sellPrice: Type.Optional(Type.String()),
     categories: Type.Array(Type.Object({
       id: Type.Number()
     }))

@@ -12,7 +12,8 @@ export namespace Find {
 
   export const Obj = Type.Intersect([
     Type.Object({
-      type: Type.Enum(TransType)
+      type: Type.Enum(TransType),
+      keyword: Type.String({ default: '' })
     }),
     BaseFind.Obj
   ])

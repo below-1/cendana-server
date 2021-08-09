@@ -22,7 +22,7 @@ export async function find(keyword: string, options: FindOptions.Marker) {
     skip: offset,
     take: perPage,
     orderBy: {
-      name: 'asc'
+      updatedAt: 'desc'
     }
   })
   return {

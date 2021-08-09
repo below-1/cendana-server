@@ -8,7 +8,7 @@ export async function update(id: number, payload: DTO.Update.Marker) {
     data: {
       ...rest,
       categories: {
-        connect: categories
+        connect: categories.map(it => ({ id: it.id }))
       }
     }
   });

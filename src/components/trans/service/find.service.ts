@@ -4,7 +4,7 @@ import {
   TransactionType,
   PaymentMethod
 } from '@prisma/client';
-import { FindOptions } from '@cend/commons/find';
+import { FindOptions as BaseOptions } from '@cend/commons/find';
 
 export enum TransType {
   PURCHASE = 'PURCHASE',
@@ -13,27 +13,36 @@ export enum TransType {
   ALL = 'ALL'
 }
 
-export async function findTransactions(t: TransType, options: FindOptions.Marker) {
+interface FindOptions extends BaseOptions.Marker {
+  keyword?: string;
+}
+
+export async function findTransactions(t: TransType, options: FindOptions) {
   let where: any
   switch (t) {
+    
     case TransType.PURCHASE:
       where = {AND: [ 
           {orderId: { gte: 1 }},
           {type: TransactionType.CREDIT}
       ]}
       break;
+
     case TransType.SALE:
       where = {AND: [ 
           {orderId: { gte: 1 }},
           {type: TransactionType.DEBIT}
       ]}
       break;
+
     case TransType.OPEX:
       where = {AND: [ 
           {opexId: { gte: 1 }},
+          {opex: { title: { contains: options.keyword }}},
           {type: TransactionType.CREDIT}
       ]}
       break;
+
     case TransType.ALL:
       where = {}
       break;
