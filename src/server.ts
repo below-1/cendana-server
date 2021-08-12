@@ -40,6 +40,7 @@ export function createServer() {
   server.register(components.opex.plugin, { prefix: '/v1/api/opexes' })
   server.register(components.tool.plugin, { prefix: '/v1/api/tools' })
   server.register(components.transaction.plugin, { prefix: '/v1/api/transactions' })
+  server.register(components.latestStock.plugin, { prefix: '/v1/api/latest-stock' })
 
   return server
 }
