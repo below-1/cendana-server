@@ -48,4 +48,12 @@ export async function plugin(fastify: FastifyInstance) {
     },
     handler: handler.get
   })
+
+  fastify.get('/free-for-order', {
+    schema: {
+      tags: ['products'],
+      querystring: DTO.FindFreeForOrder.Obj
+    },
+    handler: handler.getFreeForOrder
+  })
 }

@@ -6,7 +6,8 @@ import {
   update,
   remove as removeProduct,
   find,
-  findOne
+  findOne,
+  findFreeForOrder
 } from './service';
 
 type PostRequest = FastifyRequest<{ Body: DTO.Create.Marker }>;
@@ -14,6 +15,7 @@ type PutRequest = FastifyRequest<{ Body: DTO.Update.Marker, Params: ID.Marker }>
 type DeleteRequest = FastifyRequest<{ Params: ID.Marker }>;
 type GetByIdRequest = FastifyRequest<{ Params: ID.Marker }>;
 type GetRequest = FastifyRequest<{ Querystring: DTO.Find.Marker }>;
+type GetFreeForOrderRequest = FastifyRequest<{ Querystring: DTO.FindFreeForOrder.Marker }>;
 
 export async function post(request: PostRequest, reply: Reply) {
   const result = await create(request.body);
@@ -46,4 +48,11 @@ export async function get(request: GetRequest, reply: Reply) {
   const { keyword, ...options } = request.query;
   const result = await find(keyword, options);
   reply.send(result);
+}
+
+export async function getFreeForOrder(request: GetFreeForOrderRequest, reply: Reply) {
+  const options = request.query
+  const { orderId, ...rest } = options
+  const result = await findFreeForOrder(orderId, rest)
+  reply.send(result)
 }

@@ -35,3 +35,15 @@ export namespace Find {
 
   export type Marker = Static<typeof Obj>;
 }
+
+export namespace FindFreeForOrder {
+  export const Obj = Type.Intersect([
+    Type.Object({
+      orderId: Type.Number(),
+      keyword: Type.String({ default: '' })
+    }),
+    FindOptions.Obj
+  ])
+
+  export type Marker = Static<typeof Obj>;
+}
