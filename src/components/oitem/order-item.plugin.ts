@@ -38,4 +38,11 @@ export async function plugin(fastify: FastifyInstance) {
     },
     handler: handlers.find
   })
+  fastify.get('/:id', {
+    schema: {
+      tags: ['order-items'],
+      params: ID.Obj
+    },
+    handler: handlers.findOne
+  })
 }

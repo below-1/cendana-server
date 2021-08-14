@@ -1,19 +1,15 @@
 import { Static, Type } from '@sinclair/typebox'
 import { FindOptions as BaseFind } from '@cend/commons/find';
+import { TransType } from './trans-type.enum'
 
 export namespace Find {
-
-  enum TransType {
-    PURCHASE = 'PURCHASE',
-    SALE = 'SALE',
-    OPEX = 'OPEX',
-    ALL = 'ALL'
-  }
 
   export const Obj = Type.Intersect([
     Type.Object({
       type: Type.Enum(TransType),
-      keyword: Type.String({ default: '' })
+      keyword: Type.String({ default: '' }),
+      year: Type.Number(),
+      month: Type.Number()
     }),
     BaseFind.Obj
   ])

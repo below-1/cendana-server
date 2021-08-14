@@ -39,7 +39,8 @@ export namespace AddTransaction {
     authorId: Type.Number(),
     nominal: Type.String(),
     status: Type.Enum(TransactionStatus),
-    paymentMethod: Type.Enum(PaymentMethod)
+    paymentMethod: Type.Enum(PaymentMethod),
+    createdAt: Type.String({ format: 'date-time' })
   })
   export type Marker = Static<typeof Obj>;
 }

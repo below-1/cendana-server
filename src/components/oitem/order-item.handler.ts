@@ -5,7 +5,8 @@ import {
   update,
   remove as removeStockItem,
   findForSale,
-  findForProduct
+  findForProduct,
+  findById
 } from './service';
 import { ID } from '@cend/commons/request'
 
@@ -13,6 +14,7 @@ type PostRequest = Request<{ Body: DTO.Create.Marker }>;
 type PutRequest = Request<{ Params: ID.Marker, Body: DTO.Update.Marker }>;
 type RemoveRequest = Request<{ Params: ID.Marker }>;
 type FindRequest = Request<{ Querystring: DTO.Find.Marker }>;
+type FindOneRequest = Request<{ Params: ID.Marker }>;
 
 export async function post(request: PostRequest, reply: Reply) {
   const payload = request.body;
@@ -45,4 +47,10 @@ export async function find(request: FindRequest, reply: Reply) {
   } else {
     throw new Error(`filter is not valid`);
   }
+}
+
+export async function findOne(request: FindOneRequest, reply: Reply) {
+  const { id } = request.params
+  const result = await findById(id)
+  reply.send(result)
 }

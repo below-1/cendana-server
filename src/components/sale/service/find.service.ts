@@ -2,7 +2,6 @@ import { prisma } from '@cend/commons/prisma';
 import { OrderType } from '@prisma/client';
 import { FindOptions } from '@cend/commons/find';
 
-
 export async function find(options: FindOptions.Marker) {
   const totalData = await prisma.order.count({
     where: {

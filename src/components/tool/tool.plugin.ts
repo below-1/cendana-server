@@ -19,4 +19,25 @@ export async function plugin(fastify: FastifyInstance) {
       body: DTO.Update.Obj
     }
   })
+  fastify.get('/', {
+    handler: handler.getMany,
+    schema: {
+      tags: ['tools'],
+      querystring: DTO.Find.Obj
+    }
+  })
+  fastify.get('/:id', {
+    handler: handler.getOne,
+    schema: {
+      tags: ['tools'],
+      params: ID.Obj
+    }
+  })
+  fastify.delete('/:id', {
+    handler: handler.remove,
+    schema: {
+      tags: ['tools'],
+      params: ID.Obj
+    }
+  })
 }
