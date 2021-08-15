@@ -42,6 +42,14 @@ export async function findTransactions(t: TransType, options: FindOptions) {
       ]
       break;
 
+    case TransType.TOOL:
+      conditions = [
+        ...conditions,
+        { tool: { title: { contains: options.keyword } } },
+        { type: TransactionType.CREDIT }
+      ]
+      break;
+
     case TransType.AP_PAYMENT:
       conditions = [
         ...conditions,
@@ -81,6 +89,7 @@ export async function findTransactions(t: TransType, options: FindOptions) {
     where,
     include: {
       opex: true,
+      tool: true,
       order: true,
       author: true
     },

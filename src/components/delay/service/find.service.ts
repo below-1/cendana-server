@@ -19,7 +19,14 @@ export async function find(options: DTO.Find.Marker) {
   const items = await prisma.delay.findMany({ 
     ...where,
     skip: offset,
-    take: options.perPage
+    take: options.perPage,
+    include: {
+      order: {
+        include: {
+          targetUser: true
+        }
+      }
+    }
   })
   return {
     totalPage,

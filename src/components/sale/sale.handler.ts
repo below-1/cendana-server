@@ -4,6 +4,7 @@ import { ID } from '@cend/commons/request'
 import * as services from './service';
 
 type PostRequest = Request<{ Body: DTO.Create.Marker }>;
+type PutRequest = Request<{ Params: ID.Marker, Body: DTO.Update.Marker }>;
 type FindOneRequest = Request<{ Params: ID.Marker }>;
 type FindRequest = Request<{ Querystring: DTO.Find.Marker }>;
 type SealRequest = Request<{ Params: ID.Marker, Body: DTO.SealTransaction.Marker }>;
@@ -13,6 +14,13 @@ export async function post(request: PostRequest, reply: Reply) {
   const payload = request.body;
   const purchase = await services.create(payload);
   reply.send(purchase);
+}
+
+export async function put(request: PutRequest, reply: Reply) {
+  const payload = request.body
+  const { id } = request.params
+  const result = await services.update(id, payload)
+  reply.send(result);
 }
 
 export async function getOne(request: FindOneRequest, reply: Reply) {

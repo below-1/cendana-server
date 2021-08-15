@@ -1,5 +1,6 @@
 import { prisma } from '@cend/commons/prisma';
 import { OrderStatus, OrderType } from '@prisma/client';
+import { services as saleServices } from '@cend/components/sale'
 
 export async function remove(id: number) {
   const orderItem = await prisma.orderItem.findFirst({ 
@@ -28,7 +29,9 @@ export async function remove(id: number) {
 
   const deleted = await prisma.orderItem.delete({
     where: { id }
-  });
+  })
+
+  await saleServices.updateStock(orderId)
 
   return deleted;
 }

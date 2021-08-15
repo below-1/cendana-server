@@ -1,6 +1,7 @@
 import { prisma } from '@cend/commons/prisma';
 import { Decimal } from '@prisma/client/runtime';
 import { OrderStatus, OrderType } from '@prisma/client';
+import { services as saleServices } from '@cend/components/sale'
 
 export type UpdatePayload = {
   quantity?: number;
@@ -38,5 +39,8 @@ export async function update(id: number, payload: UpdatePayload) {
     where: { id },
     data: payload
   });
+
+  await saleServices.updateStock(orderId)
+  
   return result;
 }

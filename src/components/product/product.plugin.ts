@@ -1,7 +1,8 @@
 import { FastifyInstance } from "fastify";
+import { FindOptions } from '@cend/commons/find'
+import { ID }  from '@cend/commons/request';
 import * as handler from './product.handler';
 import * as DTO from './product.dto';
-import { ID }  from '@cend/commons/request';
 
 export async function plugin(fastify: FastifyInstance) {
 
@@ -55,5 +56,23 @@ export async function plugin(fastify: FastifyInstance) {
       querystring: DTO.FindFreeForOrder.Obj
     },
     handler: handler.getFreeForOrder
+  })
+
+  fastify.get('/:id/sales', {
+    schema: {
+      tags: ['products', 'sales'],
+      params: ID.Obj,
+      querystring: FindOptions.Obj
+    },
+    handler: handler.getProductSales
+  })
+
+  fastify.get('/:id/purchases', {
+    schema: {
+      tags: ['products', 'purchases'],
+      params: ID.Obj,
+      querystring: FindOptions.Obj
+    },
+    handler: handler.getProductPurchases
   })
 }

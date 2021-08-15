@@ -9,8 +9,9 @@ import { calculateTotal } from './calculate-total.service';
 
 export async function updateStock(id: number) {
   const purchase = await findById(id);
-  const orderItemsResult = await orderItemServices.findForSale(id, { perPage: -1, page: 0 });
-  const totals = await calculateTotal(purchase, orderItemsResult.items);
+  const orderItemsResult = await orderItemServices.findForSale(id, { perPage: -1, page: 0 })
+  console.log(orderItemsResult.items)
+  const totals = calculateTotal(purchase, orderItemsResult.items);
   const result = await prisma.order.update({
     where: {
       id

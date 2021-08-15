@@ -2,6 +2,7 @@ import { prisma } from '@cend/commons/prisma';
 import { OrderStatus, OrderType } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime';
 import { services as stockItemServices } from '@cend/components/sitem';
+import { services as saleServices } from '@cend/components/sale'
 
 export type CreatePayload = {
   orderId: number;
@@ -16,12 +17,7 @@ export type CreatePayload = {
 
 export async function create(payload: CreatePayload) {
   const { orderId, productId, authorId, stockItemId, ...rest } = payload;
-  const order = await prisma.order.findFirst({
-    where: {
-      id: orderId,
-      orderType: OrderType.SALE
-    }
-  });
+  const order = await saleServices.findById(orderId)
 
   if (!order) {
     throw new Error(`Sale(id=${orderId}) can't be found`);
@@ -59,5 +55,8 @@ export async function create(payload: CreatePayload) {
       }
     }
   });
+  
+  await saleServices.updateStock(orderId)
+
   return orderItem;
 }

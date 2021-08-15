@@ -41,14 +41,17 @@ export async function sealTransaction(payload: SealTransactionPayload) {
   let statements = [];
 
   orderItems.forEach(orderItem => {
-    const syncStockItem = prisma.$executeRaw(`
+    const syncStockItem = prisma.$executeRaw`
       update "StockItem" 
-        set available = available - ${orderItem.quantity} 
-        where id = ${orderItem.stockItemId}`);
-    const syncProduct = prisma.$executeRaw(`
+        set available = available - ${orderItem.quantity},
+        sold = sold + ${orderItem.quantity}
+        where id = ${orderItem.stockItemId}`;
+    const syncProduct = prisma.$executeRaw`
       update "Product" set 
-        available = available - ${orderItem.quantity} 
-        where id = ${orderItem.productId}`);
+        available = available - ${orderItem.quantity},
+        sold = sold + ${orderItem.quantity}
+        where id = ${orderItem.productId}`;
+
     statements.push(syncStockItem);
     statements.push(syncProduct);
   });
