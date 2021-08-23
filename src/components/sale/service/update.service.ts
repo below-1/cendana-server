@@ -1,6 +1,5 @@
 import { prisma } from '@cend/commons/prisma';
 import {
-  OrderStatus, 
   OrderType
 } from '@prisma/client';
 import { updateStock } from './update-stock.service'
@@ -19,8 +18,7 @@ export async function update(id: number, payload: UpdatePayload) {
   const updateResult = await prisma.order.updateMany({
     where: {
       AND: [
-        { id },
-        { orderStatus: OrderStatus.OPEN }
+        { id }
       ]
     },
     data: {

@@ -9,8 +9,8 @@ import { services as stockItemServices } from '@cend/components/sitem';
 
 export async function updateStock(id: number) {
   const purchase = await findById(id);
-  const stockItems = await stockItemServices.findForOrder(id);
-  const totals = await calculateTotal(purchase, stockItems);
+  const stockItems = await stockItemServices.findForOrder(id, { perPage: -1, page: 0 });
+  const totals = await calculateTotal(purchase, stockItems.items);
   const result = await prisma.order.update({
     where: {
       id

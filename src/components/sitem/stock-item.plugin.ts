@@ -22,6 +22,15 @@ export async function plugin(fastify: FastifyInstance) {
     handler: handlers.put
   })
 
+  fastify.put('/:id/defect', {
+    schema: {
+      tags: ['stock-items'],
+      body: DTO.ChangeDefect.Obj,
+      params: ID.Obj
+    },
+    handler: handlers.putDefect
+  })
+
   fastify.delete('/:id', {
     schema: {
       tags: ['stock-items'],
@@ -36,6 +45,14 @@ export async function plugin(fastify: FastifyInstance) {
       querystring: DTO.Find.Obj
     },
     handler: handlers.find
+  })
+
+  fastify.get('/:id', {
+    schema: {
+      tags: ['stock-items'],
+      params: ID.Obj
+    },
+    handler: handlers.getOne
   })
   
 }

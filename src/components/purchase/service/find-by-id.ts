@@ -1,5 +1,5 @@
-import { prisma } from '@cend/commons/prisma';
-import { OrderType } from '@prisma/client';
+import { prisma } from '@cend/commons/prisma'
+import { OrderType } from '@prisma/client'
 
 export async function findById(id: number) {
   const purchase = await prisma.order.findFirst({
@@ -11,7 +11,9 @@ export async function findById(id: number) {
     },
     include: {
       targetUser: true,
-      author: true
+      author: true,
+      delay: true,
+      transaction: true
     }
   });
   if (!purchase) {

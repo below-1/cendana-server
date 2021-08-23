@@ -6,7 +6,6 @@ export namespace Create {
     orderId: Type.Number(),
     authorId: Type.Number(),
     productId: Type.Number(),
-    stockItemId: Type.Number(),
     quantity: Type.Number(),
     discount: Type.Number(),
     description: Type.Optional(Type.String()),

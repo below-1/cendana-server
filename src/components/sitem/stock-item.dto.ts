@@ -48,3 +48,11 @@ export namespace Find {
 
   export type Marker = Static<typeof Obj>;
 }
+
+export namespace ChangeDefect {
+  export const Obj = Type.Object({
+    defect: Type.Number({ minimum: 0 })
+  })
+
+  export type Marker = Static<typeof Obj>
+}

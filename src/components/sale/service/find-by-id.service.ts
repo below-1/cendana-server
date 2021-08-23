@@ -12,6 +12,8 @@ export async function findById(id: number) {
     include: {
       targetUser: true,
       author: true,
+      delay: true,
+      transaction: true
     }
   });
   if (!purchase) {

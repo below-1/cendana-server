@@ -8,7 +8,6 @@ export type CreatePayload = {
   orderId: number;
   authorId: number;
   productId: number;
-  stockItemId: number;
   quantity: number;
   discount: number;
   description?: string;
@@ -16,7 +15,45 @@ export type CreatePayload = {
 }
 
 export async function create(payload: CreatePayload) {
-  const { orderId, productId, authorId, stockItemId, ...rest } = payload;
+  const { orderId, productId, authorId, ...rest } = payload;
+
+  let remainder = rest.quantity;
+  let visited: number[] = [];
+  let lastVisitedStockItem = null
+  while (remainder > 0) {
+    const stockItem = await prisma.stockItem.findFirst({
+      where: {
+        AND: [
+          { productId },
+          {
+            order: { orderStatus: OrderStatus.SEALED }
+          },
+          { id: { notIn: visited } }
+        ]
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
+    if (!stockItem) {
+      throw new Error('stockItem not found');
+    }
+    const { available } = stockItem
+    let newAvailable = 0
+    if (remainder >= available) {
+      newAvailable = remainder - available
+      remainder = newAvailable
+    } else {
+      newAvailable = available - remainder
+      remainder = 0
+    }
+    lastVisitedStockItem = stockItem
+  }
+  if(!lastVisitedStockItem) {
+    throw new Error(`timestamped stockItem is undefined`)
+  }
+  const { id: stockItemId } = lastVisitedStockItem
+
   const order = await saleServices.findById(orderId)
 
   if (!order) {
