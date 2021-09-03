@@ -41,58 +41,58 @@ export async function sealTransaction(payload: SealTransactionPayload) {
   let statements = [];
 
   for (let orderItem of orderItems) {
-    const { 
+    const {
       quantity: requestedQuantity,
       productId
     } = orderItem
     let remainder = requestedQuantity
-    let lastCreatedAt = null
-    let visited: number[] = []
-    while (remainder > 0) {
-      const stockItem = await prisma.stockItem.findFirst({
-        where: {
-          id: {
-            notIn: visited
-          },
-          order: {
-            orderStatus: OrderStatus.SEALED
-          },
-          productId
-        },
-        orderBy: {
-          createdAt: 'desc'
-        }
-      })
-      if (!stockItem) {
-        throw new Error(`There is no Stock for Product(id=${productId})`)
-      }
-      console.log(`stock.id = ${stockItem.id}`)
-      const {
-        available,
-        sold
-      } = stockItem
-      let newAvailable = available
-      let newSold = sold
-      if (remainder > available) {
-        remainder -= available
-        newAvailable = 0
-        newSold += available
-      } else {
-        newSold += remainder
-        newAvailable = available - remainder
-        remainder = 0
-      }
-      console.log(`remainder = ${remainder}`)
-      console.log(`newAvailable = ${newAvailable}`)
-      console.log(`newSold = ${newSold}`)
-      const syncStockItem = prisma.$executeRaw`
-      update "StockItem" 
-        set available = ${newAvailable},
-        sold = ${newSold}
-        where id = ${stockItem.id}`
-      visited.push(stockItem.id)
-      statements.push(syncStockItem)
-    }
+    // let lastCreatedAt = null
+    // let visited: number[] = []
+    // while (remainder > 0) {
+    //   const stockItem = await prisma.stockItem.findFirst({
+    //     where: {
+    //       id: {
+    //         notIn: visited
+    //       },
+    //       order: {
+    //         orderStatus: OrderStatus.SEALED
+    //       },
+    //       productId
+    //     },
+    //     orderBy: {
+    //       createdAt: 'desc'
+    //     }
+    //   })
+    //   if (!stockItem) {
+    //     throw new Error(`There is no Stock for Product(id=${productId})`)
+    //   }
+    //   console.log(`stock.id = ${stockItem.id}`)
+    //   const {
+    //     available,
+    //     sold
+    //   } = stockItem
+    //   let newAvailable = available
+    //   let newSold = sold
+    //   if (remainder > available) {
+    //     remainder -= available
+    //     newAvailable = 0
+    //     newSold += available
+    //   } else {
+    //     newSold += remainder
+    //     newAvailable = available - remainder
+    //     remainder = 0
+    //   }
+    //   console.log(`remainder = ${remainder}`)
+    //   console.log(`newAvailable = ${newAvailable}`)
+    //   console.log(`newSold = ${newSold}`)
+    //   const syncStockItem = prisma.$executeRaw`
+    //   update "StockItem" 
+    //     set available = ${newAvailable},
+    //     sold = ${newSold}
+    //     where id = ${stockItem.id}`
+    //   visited.push(stockItem.id)
+    //   statements.push(syncStockItem)
+    // }
     const syncProduct = prisma.$executeRaw`
       update "Product" set 
         available = available - ${orderItem.quantity},

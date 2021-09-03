@@ -36,7 +36,7 @@ export async function sealTransaction(payload: SealTransactionPayload) {
     include: {
       stockItems: true
     }
-  });
+  })
   if (!order) {
     throw new Error(`can't find purchase with id=${orderId}`);
   }
