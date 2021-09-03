@@ -7,6 +7,7 @@ import {
 } from '@prisma/client';
 import { FindOptions as BaseOptions } from '@cend/commons/find';
 import { TransType } from '../trans-type.enum'
+import { toDateUpperLower } from '@cend/commons/to-date-upper-lower'
 
 interface FindOptions extends BaseOptions.Marker {
   keyword?: string;
@@ -16,13 +17,21 @@ interface FindOptions extends BaseOptions.Marker {
 
 export async function findTransactions(t: TransType, options: FindOptions) {
   let conditions: any[] = []
+
+  const { month, year } = options
+  const { lower: lowerDate, upper: upperDate } = toDateUpperLower(year, month)
+  conditions.push({ createdAt: {
+    gte: lowerDate,
+    lte: upperDate
+  }})
+
   switch (t) {
 
     case TransType.PURCHASE:
       conditions = [
         ...conditions,
         { orderId: { gte: 1 } },
-          { type: TransactionType.CREDIT }
+        { type: TransactionType.CREDIT }
       ]
       break;
 
@@ -53,14 +62,14 @@ export async function findTransactions(t: TransType, options: FindOptions) {
     case TransType.AP_PAYMENT:
       conditions = [
         ...conditions,
-        {delay: { type: DelayType.PAYABLE }}
+        { delay: { type: DelayType.PAYABLE } }
       ]
       break;
 
     case TransType.AR_PAYMENT:
       conditions = [
         ...conditions,
-        {delay: {type: DelayType.RECEIVABLE}}
+        { delay: { type: DelayType.RECEIVABLE } }
       ]
       break;
 
@@ -80,6 +89,7 @@ export async function findTransactions(t: TransType, options: FindOptions) {
   const totalData = await prisma.transaction.count({
     where
   })
+
 
   const perPage = options.perPage == -1 ? totalData : options.perPage
   const totalPage = Math.ceil(totalData / perPage)

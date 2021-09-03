@@ -64,7 +64,9 @@ export namespace RemoveStockItemParam {
 export namespace Find {
   export const Obj = Type.Intersect([
     Type.Object({
-      keyword: Type.String({ default: '' })
+      keyword: Type.String({ default: '' }),
+      year: Type.Number(),
+      month: Type.Number()
     }),
     FindOptions.Obj
   ])

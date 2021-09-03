@@ -9,6 +9,7 @@ specifiers:
   '@types/jsonwebtoken': ^8.5.4
   '@types/node': ^16.3.3
   bcrypt: ^5.0.1
+  date-fns: ^2.22.1
   dotenv: ^10.0.0
   faker: ^5.5.3
   fastify: ^3.19.1
@@ -31,6 +32,7 @@ dependencies:
   '@prisma/client': 2.27.0_prisma@2.27.0
   '@sinclair/typebox': 0.17.8
   bcrypt: 5.0.1
+  date-fns: 2.22.1
   fastify: 3.19.1
   fastify-blipp: 3.1.0
   fastify-cors: 6.0.2
@@ -320,6 +322,11 @@ packages:
   /create-require/1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
     dev: true
+
+  /date-fns/2.22.1:
+    resolution: {integrity: sha512-yUFPQjrxEmIsMqlHhAhmxkuH769baF21Kk+nZwZGyrMoyLA+LugaQtC0+Tqf9CBUUULWwUJt6Q5ySI3LJDDCGg==}
+    engines: {node: '>=0.11'}
+    dev: false
 
   /debug/2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}

@@ -30,7 +30,18 @@ export async function getOne(request: FindOneRequest, reply: Reply) {
 
 export async function find(request: FindRequest, reply: Reply) {
   const options = request.query;
-  const result = await services.find(options);
+  const {
+    keyword,
+    year,
+    month,
+    ...rest
+  } = request.query
+  const conditions = {
+    keyword,
+    year,
+    month
+  }
+  const result = await services.find(conditions, rest);
   reply.send(result);
 }
 

@@ -9,12 +9,14 @@ export function calculateTotal(order: Order, stockItems: StockItem[]) {
   const subTotal = stockItems
     .map(x => x.buyPrice.mul(x.quantity))
     .reduce((a, b) => a.plus(b), new Decimal('0'));
+  console.log(`subTotal = ${subTotal}`)
 
-    // TOTAL
+  // TOTAL
   const tax = new Decimal(order.tax / 100);
   const totalPlusShipping = subTotal.plus(order.shipping);
   const totalPlusShippingAndTax = totalPlusShipping.plus(totalPlusShipping.mul(tax));
   const total = totalPlusShippingAndTax;
+  console.log(`total = ${total}`)
   
   // GRAND TOTAL
   const itemsDiscountedTotal = stockItems

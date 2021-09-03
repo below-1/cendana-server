@@ -221,6 +221,7 @@ model Transaction {
   opexId                Int?
   tool                  Tool?                    @relation(fields: [toolId], references: [id], onDelete: Cascade)
   toolId                Int?
+  description           String?         @db.Text
 }
 
 model Opex {
