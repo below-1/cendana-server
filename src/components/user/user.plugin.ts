@@ -1,11 +1,54 @@
 import { FastifyInstance } from "fastify";
 import * as CustomerHandlers from './customer.handler';
 import * as SupplierHandlers from './supplier.handler';
+import * as StafHandlers from './staf.handler'
 import * as AdminHandlers from './admin.handler';
 import * as DTO from './user.dto';
 import { ID } from '@cend/commons/request'
 
 export async function plugin(fastify: FastifyInstance) {
+
+  fastify.post('/stafs', {
+    schema: {
+      tags: ['stafs'],
+      body: DTO.Staf.Create.Obj
+    },
+    handler: StafHandlers.post
+  })
+
+  fastify.put('/stafs/:id', {
+    schema: {
+      tags: ['stafs'],
+      params: ID.Obj,
+      body: DTO.Staf.Update.Obj
+    },
+    handler: StafHandlers.put
+  })
+
+  fastify.delete('/stafs/:id', {
+    schema: {
+      tags: ['stafs'],
+      params: ID.Obj
+    },
+    handler: StafHandlers.remove
+  })
+
+  fastify.get('/stafs', {
+    schema: {
+      tags: ['stafs'],
+      querystring: DTO.Find.Obj
+    },
+    handler: StafHandlers.getMany
+  })
+
+  fastify.get('/stafs/:id', {
+    schema: {
+      tags: ['stafs'],
+      params: ID.Obj
+    },
+    handler: CustomerHandlers.getOne
+  })
+
   fastify.post('/customers', {
     schema: {
       tags: ['customers'],
@@ -88,6 +131,13 @@ export async function plugin(fastify: FastifyInstance) {
     handler: SupplierHandlers.remove
   })
 
+  fastify.get('/admins', {
+    schema: {
+      tags: ['admins'],
+      querystring: DTO.Find.Obj
+    },
+    handler: AdminHandlers.getMany
+  })
   fastify.delete('/admins/:id', {
     schema: {
       tags: ['admins'],

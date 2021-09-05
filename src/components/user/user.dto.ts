@@ -87,3 +87,22 @@ export namespace Supplier {
     export type Marker = Static<typeof Obj>;
   }
 }
+
+export namespace Staf {
+  export namespace Create {
+    export const Obj = Type.Object({
+      username: Type.String(),
+      password: Type.String(),
+      name: Type.String()
+    })
+    export type Marker = Static<typeof Obj>;
+  }
+
+  export namespace Update {
+    export const Obj = Type.Object({
+      name: Type.Optional(Type.String()),
+      username: Type.Optional(Type.String())
+    })
+    export type Marker = Static<typeof Obj>;
+  }
+}

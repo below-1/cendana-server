@@ -118,8 +118,6 @@ model StockItem {
   order                     Order           @relation("StockItems", fields: [orderId], references: [id], onDelete: Cascade)
   orderId                   Int
 
-  orderItems                OrderItem[]
-
   buyPrice  Decimal
   sellPrice Decimal
   discount  Int     @default(0)
@@ -141,9 +139,6 @@ model OrderItem {
 
   product     Product   @relation(fields: [productId], references: [id])
   productId   Int
-
-  stockItem   StockItem @relation(fields: [stockItemId], references: [id], onDelete: Cascade)
-  stockItemId Int
 
   order       Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
   orderId     Int

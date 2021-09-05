@@ -25,4 +25,12 @@ export async function plugin(fastify: FastifyInstance) {
     },
     handler: handlers.currentUser
   })
+
+  fastify.put('/change-password', {
+    schema: {
+      tags: ['auth'],
+      body: DTO.ChangePassword.Obj
+    },
+    handler: handlers.changePassword
+  })
 }

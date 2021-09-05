@@ -16,3 +16,11 @@ export namespace SignUp {
   })
   export type Marker = Static<typeof Obj>;
 }
+
+export namespace ChangePassword {
+  export const Obj = Type.Object({
+    username: Type.String(),
+    password: Type.String()
+  })
+  export type Marker = Static<typeof Obj>
+}

@@ -1,3 +1,4 @@
+import { prisma } from '@cend/commons/prisma';
 import { Role } from '@prisma/client';
 import * as DTO from './auth.dto';
 import jwt from 'jsonwebtoken';
@@ -44,4 +45,18 @@ export async function currentUser(token: string) {
   const authObject: any = await jwt.verify(token, process.env.JWT_SECRET!);
   const user = await userServices.findOneUserByUsername(authObject.username);
   return user;
+}
+
+export async function changePassword(username: string, password: string) {
+  const hashedPassword = await bcrypt.hash(password, 2);
+  const result = await prisma.user.updateMany({
+    where: {
+      username
+    },
+    data: {
+      password: hashedPassword
+    }
+  })
+  const isSuccess = result.count == 1
+  return isSuccess
 }

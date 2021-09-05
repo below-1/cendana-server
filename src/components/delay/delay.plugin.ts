@@ -37,4 +37,11 @@ export async function plugin(fastify: FastifyInstance) {
     },
     handler: paymentHandlers.postPayment
   })
+  fastify.delete('/payments/:id', {
+    schema: {
+      tags: ['delay'],
+      params: ID.Obj
+    },
+    handler: paymentHandlers.removePayment
+  })
 }
