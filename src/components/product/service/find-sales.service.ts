@@ -28,6 +28,7 @@ export async function findSales(
   const perPage = options.perPage == -1 ? totalData : options.perPage;
   const totalPage = Math.ceil(totalData / perPage);
   const offset = perPage * options.page;
+  console.log(`offset = ${offset}`)
 
   const items = await prisma.orderItem.findMany({
     where: {
@@ -43,7 +44,9 @@ export async function findSales(
         }
       },
       author: true
-    }
+    },
+    skip: offset,
+    take: perPage
   })
 
   return {

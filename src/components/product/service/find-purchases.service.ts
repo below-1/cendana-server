@@ -43,7 +43,9 @@ export async function findPurchases(
         }
       },
       author: true
-    }
+    },
+    skip: offset,
+    take: perPage
   })
 
   return {
