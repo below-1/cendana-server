@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch:compile": "tsc -w",
     "watch:dist": "pm2 start dist/index.js --name cendana-api --watch",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "install": "npx tsc"
   },
   "keywords": [],
   "author": "",
