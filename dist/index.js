@@ -47,7 +47,7 @@ function main() {
         return __generator(this, function (_a) {
             server = server_1.createServer();
             port = process.env.PORT ? parseInt(process.env.PORT) : 5000;
-            server.listen(port, function (err, address) {
+            server.listen(port, '0.0.0.0', function (err, address) {
                 if (err) {
                     console.log(err);
                     process.exit(1);
