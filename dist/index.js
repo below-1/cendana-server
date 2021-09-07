@@ -37,7 +37,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require('module-alias/register');
-require('dotenv').config();
+if (process.env.NODE_ENV == 'development') {
+    require('dotenv').config();
+}
 var server_1 = require("./server");
 function main() {
     return __awaiter(this, void 0, void 0, function () {

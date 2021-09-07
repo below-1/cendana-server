@@ -1,5 +1,7 @@
 require('module-alias/register')
-require('dotenv').config()
+if (process.env.NODE_ENV == 'development') {
+  require('dotenv').config()
+}
 import { createServer } from './server'
 
 async function main() {
