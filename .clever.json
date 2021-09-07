@@ -1,0 +1,11 @@
+{
+  "apps": [
+    {
+      "app_id": "app_3ae5dde5-5bdc-4381-bcf9-89a2e9086dde",
+      "org_id": "user_35c0f43a-abea-4f63-92bb-788f5d214024",
+      "deploy_url": "https://github.com/below-1/cendana-server.git",
+      "name": "cendana-server",
+      "alias": "cendana-server"
+    }
+  ]
+}
