@@ -42,6 +42,7 @@ export function createServer() {
   server.register(components.toolTrans.plugin, { prefix: '/v1/api/tool-trans' })
   server.register(components.transaction.plugin, { prefix: '/v1/api/transactions' })
   server.register(components.latestStock.plugin, { prefix: '/v1/api/latest-stock' })
+  server.register(components.summary.plugin, { prefix: '/v1/api/summary' })
 
   return server
 }

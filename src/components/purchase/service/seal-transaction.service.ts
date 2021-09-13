@@ -78,7 +78,8 @@ export async function sealTransaction(payload: SealTransactionPayload) {
       type: TransactionType.CREDIT,
       status: payload.status,
       paymentMethod: payload.paymentMethod,
-      nominal: payload.nominal
+      nominal: payload.nominal,
+      createdAt: order.createdAt
     }
   });
   statements.push(createTransStatement);

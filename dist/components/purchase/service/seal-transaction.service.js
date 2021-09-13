@@ -84,7 +84,8 @@ function sealTransaction(payload) {
                             type: client_1.TransactionType.CREDIT,
                             status: payload.status,
                             paymentMethod: payload.paymentMethod,
-                            nominal: payload.nominal
+                            nominal: payload.nominal,
+                            createdAt: order.createdAt
                         }
                     });
                     statements.push(createTransStatement);
