@@ -10,12 +10,14 @@ import {
   findOne,
   findFreeForOrder,
   findPurchases,
-  findSales
+  findSales,
+  snapshot
 } from './service';
 
 type PostRequest = FastifyRequest<{ Body: DTO.Create.Marker }>;
 type PutRequest = FastifyRequest<{ Body: DTO.Update.Marker, Params: ID.Marker }>;
 type DeleteRequest = FastifyRequest<{ Params: ID.Marker }>;
+type SnapshotRequest = FastifyRequest<{ Querystring: DTO.Snapshot.Marker }>
 type GetByIdRequest = FastifyRequest<{ Params: ID.Marker }>;
 type GetRequest = FastifyRequest<{ Querystring: DTO.Find.Marker }>;
 type GetFreeForOrderRequest = FastifyRequest<{ Querystring: DTO.FindFreeForOrder.Marker }>;
@@ -80,4 +82,12 @@ export async function getProductSales(request: GetSalesRequest, reply: Reply) {
   const { id } = request.params
   const result = await findSales(id, options)
   reply.send(result)
+}
+
+export async function createSnapshot(request: SnapshotRequest, reply: Reply) {
+  const { target } = request.query
+  await snapshot(new Date(target))
+  reply.send({
+    message: 'OK'
+  })
 }

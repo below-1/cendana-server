@@ -10,12 +10,4 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./create.service"), exports);
-__exportStar(require("./find-one.service"), exports);
-__exportStar(require("./find.service"), exports);
-__exportStar(require("./find-due-today.service"), exports);
-__exportStar(require("./update-status.service"), exports);
-__exportStar(require("./get-current-paid.service"), exports);
-__exportStar(require("./find-payments.service"), exports);
-__exportStar(require("./add-payment.service"), exports);
-__exportStar(require("./remove-payment.service"), exports);
+__exportStar(require("./laba-rugi.service"), exports);

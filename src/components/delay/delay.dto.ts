@@ -13,3 +13,11 @@ export namespace Find {
 
   export type Marker = Static<typeof Obj>;
 }
+
+export namespace DueToday {
+  export const Obj = Type.Object({
+    kind: Type.Union([Type.Literal('PAYABLE'), Type.Literal('RECEIVABLE'), Type.Literal('ALL')])
+  })
+
+  export type Marker = Static<typeof Obj>
+}

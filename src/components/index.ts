@@ -14,3 +14,4 @@ export * as orderItem from './oitem';
 export * as transaction from './trans'
 export * as latestStock from './latest-stock'
 export * as summary from './summary'
+export * as finance from './finance'

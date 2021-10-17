@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.summary = exports.latestStock = exports.transaction = exports.orderItem = exports.toolTrans = exports.tool = exports.opexTrans = exports.opex = exports.delay = exports.stockItem = exports.sale = exports.purchase = exports.auth = exports.user = exports.product = exports.productCategory = void 0;
+exports.finance = exports.summary = exports.latestStock = exports.transaction = exports.orderItem = exports.toolTrans = exports.tool = exports.opexTrans = exports.opex = exports.delay = exports.stockItem = exports.sale = exports.purchase = exports.auth = exports.user = exports.product = exports.productCategory = void 0;
 exports.productCategory = __importStar(require("./pcat"));
 exports.product = __importStar(require("./product"));
 exports.user = __importStar(require("./user"));
@@ -36,3 +36,4 @@ exports.orderItem = __importStar(require("./oitem"));
 exports.transaction = __importStar(require("./trans"));
 exports.latestStock = __importStar(require("./latest-stock"));
 exports.summary = __importStar(require("./summary"));
+exports.finance = __importStar(require("./finance"));

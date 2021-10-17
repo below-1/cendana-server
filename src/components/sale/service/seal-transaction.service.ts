@@ -137,10 +137,12 @@ export async function sealTransaction(payload: SealTransactionPayload) {
         orderId,
         dueDate: new Date(payload.delay.dueDate),
         total: order.grandTotal.sub(decimalNominal).toString(),
+        createdAt: order.createdAt,
         complete: false
       }
     });
     statements.push(createDelayStatement);
+    console.log('we got here')
   }
 
   await prisma.$transaction(statements);

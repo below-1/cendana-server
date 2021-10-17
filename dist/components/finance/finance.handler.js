@@ -36,36 +36,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDueToday = exports.get = exports.getOne = void 0;
+exports.getLabaRugi = void 0;
 var service_1 = require("./service");
-function getOne(request, reply) {
+function getLabaRugi(request, reply) {
     return __awaiter(this, void 0, void 0, function () {
-        var id, delay;
+        var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    id = request.params.id;
-                    return [4 /*yield*/, service_1.findOne(id)];
-                case 1:
-                    delay = _a.sent();
-                    if (!delay) {
-                        throw new Error("Delay(id=" + id + ") can't be found");
-                    }
-                    reply.send(delay);
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-exports.getOne = getOne;
-function get(request, reply) {
-    return __awaiter(this, void 0, void 0, function () {
-        var options, result;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    options = request.query;
-                    return [4 /*yield*/, service_1.find(options)];
+                case 0: return [4 /*yield*/, service_1.labaRugi(request.query)];
                 case 1:
                     result = _a.sent();
                     reply.send(result);
@@ -74,21 +52,4 @@ function get(request, reply) {
         });
     });
 }
-exports.get = get;
-function getDueToday(request, reply) {
-    return __awaiter(this, void 0, void 0, function () {
-        var kind, items;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    kind = request.query.kind;
-                    return [4 /*yield*/, service_1.findDueToday(kind)];
-                case 1:
-                    items = _a.sent();
-                    reply.send(items);
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-exports.getDueToday = getDueToday;
+exports.getLabaRugi = getLabaRugi;

@@ -47,7 +47,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProductSales = exports.getProductPurchases = exports.getFreeForOrder = exports.get = exports.getById = exports.remove = exports.put = exports.post = void 0;
+exports.createSnapshot = exports.getProductSales = exports.getProductPurchases = exports.getFreeForOrder = exports.get = exports.getById = exports.remove = exports.put = exports.post = void 0;
 var service_1 = require("./service");
 function post(request, reply) {
     return __awaiter(this, void 0, void 0, function () {
@@ -189,3 +189,22 @@ function getProductSales(request, reply) {
     });
 }
 exports.getProductSales = getProductSales;
+function createSnapshot(request, reply) {
+    return __awaiter(this, void 0, void 0, function () {
+        var target;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    target = request.query.target;
+                    return [4 /*yield*/, service_1.snapshot(new Date(target))];
+                case 1:
+                    _a.sent();
+                    reply.send({
+                        message: 'OK'
+                    });
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.createSnapshot = createSnapshot;

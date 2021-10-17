@@ -107,10 +107,12 @@ function sealTransaction(payload) {
                                 orderId: orderId,
                                 dueDate: new Date(payload.delay.dueDate),
                                 total: order.grandTotal.sub(decimalNominal).toString(),
+                                createdAt: order.createdAt,
                                 complete: false
                             }
                         });
                         statements.push(createDelayStatement);
+                        console.log('we got here');
                     }
                     return [4 /*yield*/, prisma_1.prisma.$transaction(statements)];
                 case 2:

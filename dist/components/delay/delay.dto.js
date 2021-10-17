@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Find = void 0;
+exports.DueToday = exports.Find = void 0;
 var typebox_1 = require("@sinclair/typebox");
 var client_1 = require("@prisma/client");
 var find_1 = require("@cend/commons/find");
@@ -14,3 +14,9 @@ var Find;
         find_1.FindOptions.Obj
     ]);
 })(Find = exports.Find || (exports.Find = {}));
+var DueToday;
+(function (DueToday) {
+    DueToday.Obj = typebox_1.Type.Object({
+        kind: typebox_1.Type.Union([typebox_1.Type.Literal('PAYABLE'), typebox_1.Type.Literal('RECEIVABLE'), typebox_1.Type.Literal('ALL')])
+    });
+})(DueToday = exports.DueToday || (exports.DueToday = {}));

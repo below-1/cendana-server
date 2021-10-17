@@ -56,81 +56,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.plugin = void 0;
-var find_1 = require("@cend/commons/find");
-var request_1 = require("@cend/commons/request");
-var handler = __importStar(require("./product.handler"));
-var DTO = __importStar(require("./product.dto"));
+var handlers = __importStar(require("./finance.handler"));
+var DTO = __importStar(require("./finance.dto"));
 function plugin(fastify) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            fastify.post('/', {
+            fastify.get('/laba-rugi', {
                 schema: {
-                    tags: ['products'],
-                    body: DTO.Create.Obj,
-                    response: {
-                        200: request_1.ID.Obj
-                    }
+                    tags: ['finance'],
+                    querystring: DTO.LabaRugi.Obj
                 },
-                handler: handler.post
-            });
-            fastify.put('/:id', {
-                schema: {
-                    tags: ['products'],
-                    body: DTO.Update.Obj,
-                    params: request_1.ID.Obj
-                },
-                handler: handler.put
-            });
-            fastify.delete('/:id', {
-                schema: {
-                    tags: ['products'],
-                    params: request_1.ID.Obj
-                },
-                handler: handler.remove
-            });
-            fastify.get('/:id', {
-                schema: {
-                    tags: ['products'],
-                    params: request_1.ID.Obj
-                },
-                handler: handler.getById
-            });
-            fastify.get('/', {
-                schema: {
-                    tags: ['products'],
-                    querystring: DTO.Find.Obj
-                },
-                handler: handler.get
-            });
-            fastify.get('/free-for-order', {
-                schema: {
-                    tags: ['products'],
-                    querystring: DTO.FindFreeForOrder.Obj
-                },
-                handler: handler.getFreeForOrder
-            });
-            fastify.get('/:id/sales', {
-                schema: {
-                    tags: ['products', 'sales'],
-                    params: request_1.ID.Obj,
-                    querystring: find_1.FindOptions.Obj
-                },
-                handler: handler.getProductSales
-            });
-            fastify.get('/:id/purchases', {
-                schema: {
-                    tags: ['products'],
-                    params: request_1.ID.Obj,
-                    querystring: find_1.FindOptions.Obj
-                },
-                handler: handler.getProductPurchases
-            });
-            fastify.post('/snapshot', {
-                schema: {
-                    tags: ['products', 'report-creation'],
-                    querystring: DTO.Snapshot.Obj
-                },
-                handler: handler.createSnapshot
+                handler: handlers.getLabaRugi
             });
             return [2 /*return*/];
         });

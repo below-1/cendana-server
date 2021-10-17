@@ -36,59 +36,42 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDueToday = exports.get = exports.getOne = void 0;
-var service_1 = require("./service");
-function getOne(request, reply) {
+exports.findDueToday = void 0;
+var date_fns_1 = require("date-fns");
+var prisma_1 = require("@cend/commons/prisma");
+function findDueToday(kind) {
     return __awaiter(this, void 0, void 0, function () {
-        var id, delay;
+        var today, conditions, where, items;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    id = request.params.id;
-                    return [4 /*yield*/, service_1.findOne(id)];
-                case 1:
-                    delay = _a.sent();
-                    if (!delay) {
-                        throw new Error("Delay(id=" + id + ") can't be found");
-                    }
-                    reply.send(delay);
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-exports.getOne = getOne;
-function get(request, reply) {
-    return __awaiter(this, void 0, void 0, function () {
-        var options, result;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    options = request.query;
-                    return [4 /*yield*/, service_1.find(options)];
-                case 1:
-                    result = _a.sent();
-                    reply.send(result);
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-exports.get = get;
-function getDueToday(request, reply) {
-    return __awaiter(this, void 0, void 0, function () {
-        var kind, items;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    kind = request.query.kind;
-                    return [4 /*yield*/, service_1.findDueToday(kind)];
+                    today = new Date();
+                    console.log(today);
+                    conditions = [
+                        { dueDate: {
+                                gte: date_fns_1.startOfDay(today),
+                                lte: date_fns_1.endOfDay(today)
+                            } }
+                        // { complete: false }
+                    ];
+                    where = {
+                        AND: conditions
+                    };
+                    return [4 /*yield*/, prisma_1.prisma.delay.findMany({
+                            where: where,
+                            include: {
+                                order: {
+                                    include: {
+                                        targetUser: true
+                                    }
+                                }
+                            }
+                        })];
                 case 1:
                     items = _a.sent();
-                    reply.send(items);
-                    return [2 /*return*/];
+                    return [2 /*return*/, items];
             }
         });
     });
 }
-exports.getDueToday = getDueToday;
+exports.findDueToday = findDueToday;

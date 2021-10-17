@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FindFreeForOrder = exports.Find = exports.Update = exports.Create = void 0;
+exports.Snapshot = exports.FindFreeForOrder = exports.Find = exports.Update = exports.Create = void 0;
 var typebox_1 = require("@sinclair/typebox");
 var find_1 = require("@cend/commons/find");
 var Create;
@@ -43,3 +43,9 @@ var FindFreeForOrder;
         find_1.FindOptions.Obj
     ]);
 })(FindFreeForOrder = exports.FindFreeForOrder || (exports.FindFreeForOrder = {}));
+var Snapshot;
+(function (Snapshot) {
+    Snapshot.Obj = typebox_1.Type.Object({
+        target: typebox_1.Type.String({ format: 'date' })
+    });
+})(Snapshot = exports.Snapshot || (exports.Snapshot = {}));

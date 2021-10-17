@@ -14,6 +14,14 @@ export async function plugin(fastify: FastifyInstance) {
     handler: delayHandlers.get
   })
 
+  fastify.get('/due-today', {
+    schema: {
+      tags: ['delay'],
+      querystring: DelayDTO.DueToday.Obj
+    },
+    handler: delayHandlers.getDueToday
+  })
+
   fastify.get('/:id', {
     schema: {
       tags: ['delay'],

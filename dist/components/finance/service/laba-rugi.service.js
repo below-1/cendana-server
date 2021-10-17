@@ -36,59 +36,41 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDueToday = exports.get = exports.getOne = void 0;
-var service_1 = require("./service");
-function getOne(request, reply) {
+exports.labaRugi = void 0;
+var prisma_1 = require("@cend/commons/prisma");
+var date_fns_1 = require("date-fns");
+function labaRugi(options) {
     return __awaiter(this, void 0, void 0, function () {
-        var id, delay;
+        var startDate, endDate, t0, t1, totalSale, hppStart, hppEnd, totalOpex, hpp, labaKotor;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    id = request.params.id;
-                    return [4 /*yield*/, service_1.findOne(id)];
+                    startDate = new Date();
+                    startDate = date_fns_1.setYear(startDate, options.year);
+                    startDate = date_fns_1.setMonth(startDate, options.month);
+                    startDate = date_fns_1.setDate(startDate, 1);
+                    endDate = date_fns_1.lastDayOfMonth(startDate);
+                    t0 = date_fns_1.format(startDate, 'yyyy-MM-dd');
+                    t1 = date_fns_1.format(endDate, 'yyyy-MM-dd');
+                    return [4 /*yield*/, prisma_1.prisma.$queryRaw("\n    select sum(o.\"grandTotal\") as total from \"Order\" o \n      where o.\"orderType\" = 'SALE'\n      and o.\"createdAt\" between '" + t0 + "' and '" + t1 + "'")];
                 case 1:
-                    delay = _a.sent();
-                    if (!delay) {
-                        throw new Error("Delay(id=" + id + ") can't be found");
-                    }
-                    reply.send(delay);
-                    return [2 /*return*/];
+                    totalSale = (_a.sent())[0].total;
+                    return [4 /*yield*/, prisma_1.prisma.$queryRaw("\n    select sum(rp.available * rp.\"sellPrice\") as total from \"RecordProduct\" rp where rp.\"date\" = '" + t0 + "'")];
+                case 2:
+                    hppStart = (_a.sent())[0].total;
+                    return [4 /*yield*/, prisma_1.prisma.$queryRaw("\n    select sum(rp.available * rp.\"sellPrice\") total from \"RecordProduct\" rp where rp.\"date\" = '" + t1 + "'")];
+                case 3:
+                    hppEnd = (_a.sent())[0].total;
+                    return [4 /*yield*/, prisma_1.prisma.$queryRaw("\n    select sum(t.nominal) as total from \"Transaction\" t \n      where t.\"createdAt\" >= '" + t0 + "' and t.\"createdAt\" <= '" + t1 + "' and t.\"opexId\" > 0")];
+                case 4:
+                    totalOpex = (_a.sent())[0].total;
+                    hpp = hppStart - hppEnd;
+                    labaKotor = totalSale - hpp;
+                    // const labaBersih = labaKotor - totalOpex
+                    console.log("labaKotor = " + labaKotor);
+                    return [2 /*return*/, 'OK'];
             }
         });
     });
 }
-exports.getOne = getOne;
-function get(request, reply) {
-    return __awaiter(this, void 0, void 0, function () {
-        var options, result;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    options = request.query;
-                    return [4 /*yield*/, service_1.find(options)];
-                case 1:
-                    result = _a.sent();
-                    reply.send(result);
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-exports.get = get;
-function getDueToday(request, reply) {
-    return __awaiter(this, void 0, void 0, function () {
-        var kind, items;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    kind = request.query.kind;
-                    return [4 /*yield*/, service_1.findDueToday(kind)];
-                case 1:
-                    items = _a.sent();
-                    reply.send(items);
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-exports.getDueToday = getDueToday;
+exports.labaRugi = labaRugi;

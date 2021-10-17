@@ -19,3 +19,4 @@ __exportStar(require("./update-stock.service"), exports);
 __exportStar(require("./update.service"), exports);
 __exportStar(require("./find-purchases.service"), exports);
 __exportStar(require("./find-sales.service"), exports);
+__exportStar(require("./snapshot.service"), exports);

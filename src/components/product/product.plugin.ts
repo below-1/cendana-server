@@ -69,10 +69,18 @@ export async function plugin(fastify: FastifyInstance) {
 
   fastify.get('/:id/purchases', {
     schema: {
-      tags: ['products', 'purchases'],
+      tags: ['products'],
       params: ID.Obj,
       querystring: FindOptions.Obj
     },
     handler: handler.getProductPurchases
+  })
+
+  fastify.post('/snapshot', {
+    schema: {
+      tags: ['products', 'report-creation'],
+      querystring: DTO.Snapshot.Obj
+    },
+    handler: handler.createSnapshot
   })
 }

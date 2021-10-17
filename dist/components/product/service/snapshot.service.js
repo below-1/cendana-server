@@ -1,4 +1,19 @@
 "use strict";
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,60 +50,53 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDueToday = exports.get = exports.getOne = void 0;
-var service_1 = require("./service");
-function getOne(request, reply) {
+exports.snapshot = void 0;
+var prisma_1 = require("@cend/commons/prisma");
+function snapshot(target) {
     return __awaiter(this, void 0, void 0, function () {
-        var id, delay;
+        var products, snapshotData;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    id = request.params.id;
-                    return [4 /*yield*/, service_1.findOne(id)];
+                case 0: return [4 /*yield*/, prisma_1.prisma.product.findMany()];
                 case 1:
-                    delay = _a.sent();
-                    if (!delay) {
-                        throw new Error("Delay(id=" + id + ") can't be found");
-                    }
-                    reply.send(delay);
+                    products = _a.sent();
+                    snapshotData = products.map(function (it) {
+                        var id = it.id, createdAt = it.createdAt, updatedAt = it.updatedAt, name = it.name, recordData = __rest(it, ["id", "createdAt", "updatedAt", "name"]);
+                        var date = target;
+                        return __assign(__assign({}, recordData), { date: date, productId: id });
+                    });
+                    // const pgDate = format(target, 'yyyy-MM-dd')
+                    // console.log(pgDate)
+                    // console.log(pgDate)
+                    // throw new Error('fatal')
+                    return [4 /*yield*/, prisma_1.prisma.$executeRaw(templateObject_1 || (templateObject_1 = __makeTemplateObject(["delete from \"RecordProduct\" where \"date\" = ", ""], ["delete from \"RecordProduct\" where \"date\" = ", ""])), target)];
+                case 2:
+                    // const pgDate = format(target, 'yyyy-MM-dd')
+                    // console.log(pgDate)
+                    // console.log(pgDate)
+                    // throw new Error('fatal')
+                    _a.sent();
+                    return [4 /*yield*/, prisma_1.prisma.recordProduct.createMany({
+                            data: snapshotData
+                        })];
+                case 3:
+                    _a.sent();
                     return [2 /*return*/];
             }
         });
     });
 }
-exports.getOne = getOne;
-function get(request, reply) {
-    return __awaiter(this, void 0, void 0, function () {
-        var options, result;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    options = request.query;
-                    return [4 /*yield*/, service_1.find(options)];
-                case 1:
-                    result = _a.sent();
-                    reply.send(result);
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-exports.get = get;
-function getDueToday(request, reply) {
-    return __awaiter(this, void 0, void 0, function () {
-        var kind, items;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    kind = request.query.kind;
-                    return [4 /*yield*/, service_1.findDueToday(kind)];
-                case 1:
-                    items = _a.sent();
-                    reply.send(items);
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-exports.getDueToday = getDueToday;
+exports.snapshot = snapshot;
+var templateObject_1;
