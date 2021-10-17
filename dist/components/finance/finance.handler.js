@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -38,14 +57,21 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getLabaRugi = void 0;
 var service_1 = require("./service");
+var DTO = __importStar(require("./finance.dto"));
 function getLabaRugi(request, reply) {
     return __awaiter(this, void 0, void 0, function () {
-        var result;
+        var type, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, service_1.labaRugi(request.query)];
+                case 0:
+                    type = request.params.type;
+                    return [4 /*yield*/, service_1.labaRugi(type, request.query)];
                 case 1:
                     result = _a.sent();
+                    if (type == DTO.RespTypeEnum.WORD) {
+                        reply.type('application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+                        console.log(result);
+                    }
                     reply.send(result);
                     return [2 /*return*/];
             }

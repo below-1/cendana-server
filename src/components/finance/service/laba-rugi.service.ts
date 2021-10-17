@@ -1,8 +1,12 @@
 import { prisma } from '@cend/commons/prisma'
 import { format, parse, lastDayOfMonth, setMonth, setYear, setDate } from 'date-fns'
+import { id as localeId } from 'date-fns/locale'
 import * as DTO from '../finance.dto'
+import { print } from '@cend/components/printer'
+import { rupiah } from '@cend/commons'
 
-export async function labaRugi(options: DTO.LabaRugi.Marker) {
+
+export async function labaRugi(type: 'JSON' | 'WORD', options: DTO.LabaRugi.Marker) {
   let startDate = new Date()
   startDate = setYear(startDate, options.year)
   startDate = setMonth(startDate, options.month)
@@ -28,11 +32,34 @@ export async function labaRugi(options: DTO.LabaRugi.Marker) {
     select sum(t.nominal) as total from "Transaction" t 
       where t."createdAt" >= '${t0}' and t."createdAt" <= '${t1}' and t."opexId" > 0`)
 
-
+  // console.log('hppStart = ', hppStart)
   const hpp = hppStart - hppEnd
+  // console.log('hpp = ', hpp)
   const labaKotor = totalSale - hpp
-  // const labaBersih = labaKotor - totalOpex
+  // console.log('labaKotor = ', labaKotor)
+  const labaSebelumPajak = labaKotor - totalOpex
+  // console.log('labaSebelumPajak = ', labaSebelumPajak)
+  const labaBersih = labaSebelumPajak - options.pajak
+  // console.log(`labaBersih = ${labaBersih}`)
 
-  console.log(`labaKotor = ${labaKotor}`)
-  return 'OK'
+  const dateLabel = format(endDate, 'dd MMMM, yyyy', { locale: localeId })
+
+  const respData = {
+    totalSale: rupiah(totalSale),
+    hpp: rupiah(hpp),
+    labaKotor: rupiah(labaKotor),
+    labaSebelumPajak: rupiah(labaSebelumPajak),
+    labaBersih: rupiah(labaBersih),
+    pajak: rupiah(options.pajak),
+    totalOpex: rupiah(totalOpex),
+    dateLabel
+  }
+
+  if (type == 'JSON') {
+    return respData
+  } else {
+    const result = await print({ path: 'laba-rugi', data: respData })
+    return result
+  }
 }
+

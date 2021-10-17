@@ -39,9 +39,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.labaRugi = void 0;
 var prisma_1 = require("@cend/commons/prisma");
 var date_fns_1 = require("date-fns");
-function labaRugi(options) {
+var locale_1 = require("date-fns/locale");
+var printer_1 = require("@cend/components/printer");
+var commons_1 = require("@cend/commons");
+function labaRugi(type, options) {
     return __awaiter(this, void 0, void 0, function () {
-        var startDate, endDate, t0, t1, totalSale, hppStart, hppEnd, totalOpex, hpp, labaKotor;
+        var startDate, endDate, t0, t1, totalSale, hppStart, hppEnd, totalOpex, hpp, labaKotor, labaSebelumPajak, labaBersih, dateLabel, respData, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -61,14 +64,32 @@ function labaRugi(options) {
                     return [4 /*yield*/, prisma_1.prisma.$queryRaw("\n    select sum(rp.available * rp.\"sellPrice\") total from \"RecordProduct\" rp where rp.\"date\" = '" + t1 + "'")];
                 case 3:
                     hppEnd = (_a.sent())[0].total;
-                    return [4 /*yield*/, prisma_1.prisma.$queryRaw("\n    select sum(t.nominal) as total from \"Transaction\" t \n      where t.\"createdAt\" >= '" + t0 + "' and t.\"createdAt\" <= '" + t1 + "' and t.\"opexId\" > 0")];
+                    return [4 /*yield*/, prisma_1.prisma.$queryRaw("\n    select sum(t.nominal) as total from \"Transaction\" t \n      where t.\"createdAt\" >= '" + t0 + "' and t.\"createdAt\" <= '" + t1 + "' and t.\"opexId\" > 0")
+                        // console.log('hppStart = ', hppStart)
+                    ];
                 case 4:
                     totalOpex = (_a.sent())[0].total;
                     hpp = hppStart - hppEnd;
                     labaKotor = totalSale - hpp;
-                    // const labaBersih = labaKotor - totalOpex
-                    console.log("labaKotor = " + labaKotor);
-                    return [2 /*return*/, 'OK'];
+                    labaSebelumPajak = labaKotor - totalOpex;
+                    labaBersih = labaSebelumPajak - options.pajak;
+                    dateLabel = date_fns_1.format(endDate, 'dd MMMM, yyyy', { locale: locale_1.id });
+                    respData = {
+                        totalSale: commons_1.rupiah(totalSale),
+                        hpp: commons_1.rupiah(hpp),
+                        labaKotor: commons_1.rupiah(labaKotor),
+                        labaSebelumPajak: commons_1.rupiah(labaSebelumPajak),
+                        labaBersih: commons_1.rupiah(labaBersih),
+                        pajak: commons_1.rupiah(options.pajak),
+                        totalOpex: commons_1.rupiah(totalOpex),
+                        dateLabel: dateLabel
+                    };
+                    if (!(type == 'JSON')) return [3 /*break*/, 5];
+                    return [2 /*return*/, respData];
+                case 5: return [4 /*yield*/, printer_1.print({ path: 'laba-rugi', data: respData })];
+                case 6:
+                    result = _a.sent();
+                    return [2 /*return*/, result];
             }
         });
     });
