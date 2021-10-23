@@ -13,3 +13,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./create.service"), exports);
 __exportStar(require("./update.service"), exports);
 __exportStar(require("./remove.service"), exports);
+__exportStar(require("./find-one.service"), exports);
+__exportStar(require("./find.service"), exports);

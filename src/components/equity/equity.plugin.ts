@@ -26,4 +26,18 @@ export async function plugin(fastify: FastifyInstance) {
     },
     handler: handlers.remove
   })
+
+  fastify.get('/:id', {
+    schema: {
+      params: ID.Obj
+    },
+    handler: handlers.findOne
+  })
+
+  fastify.get('/', {
+    schema: {
+      querystring: FindOptions.Obj
+    },
+    handler: handlers.find
+  })
 }

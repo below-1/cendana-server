@@ -55,7 +55,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.remove = exports.put = exports.post = void 0;
+exports.find = exports.findOne = exports.remove = exports.put = exports.post = void 0;
 var services = __importStar(require("./service"));
 function post(request, reply) {
     return __awaiter(this, void 0, void 0, function () {
@@ -107,3 +107,37 @@ function remove(request, reply) {
     });
 }
 exports.remove = remove;
+function findOne(request, reply) {
+    return __awaiter(this, void 0, void 0, function () {
+        var id, result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    id = request.params.id;
+                    return [4 /*yield*/, services.findOne(id)];
+                case 1:
+                    result = _a.sent();
+                    reply.send(result);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.findOne = findOne;
+function find(request, reply) {
+    return __awaiter(this, void 0, void 0, function () {
+        var options, result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    options = request.query;
+                    return [4 /*yield*/, services.find(options)];
+                case 1:
+                    result = _a.sent();
+                    reply.send(result);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.find = find;

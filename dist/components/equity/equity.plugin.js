@@ -56,6 +56,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.plugin = void 0;
+var find_1 = require("@cend/commons/find");
 var request_1 = require("@cend/commons/request");
 var handlers = __importStar(require("./equity.handler"));
 var DTO = __importStar(require("./equity.dto"));
@@ -80,6 +81,18 @@ function plugin(fastify) {
                     params: request_1.ID.Obj
                 },
                 handler: handlers.remove
+            });
+            fastify.get('/:id', {
+                schema: {
+                    params: request_1.ID.Obj
+                },
+                handler: handlers.findOne
+            });
+            fastify.get('/', {
+                schema: {
+                    querystring: find_1.FindOptions.Obj
+                },
+                handler: handlers.find
             });
             return [2 /*return*/];
         });
