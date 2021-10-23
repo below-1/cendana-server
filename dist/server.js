@@ -66,6 +66,7 @@ function createServer() {
     server.register(components.latestStock.plugin, { prefix: '/v1/api/latest-stock' });
     server.register(components.summary.plugin, { prefix: '/v1/api/summary' });
     server.register(components.finance.plugin, { prefix: '/v1/api/finance' });
+    server.register(components.equity.plugin, { prefix: '/v1/api/equity' });
     return server;
 }
 exports.createServer = createServer;

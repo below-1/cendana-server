@@ -223,8 +223,8 @@ model Transaction {
   opexId          Int?
   tool            Tool?   @relation(fields: [toolId], references: [id], onDelete: Cascade)
   toolId          Int?
-  EquityChange    EquityChange?   @relation(fields: [toolId], references: [id], onDelete: Cascade)
-  equityChangeId        Int?
+  equityChange    EquityChange?   @relation(fields: [equityChangeId], references: [id], onDelete: Cascade)
+  equityChangeId  Int?
   description String? @db.Text
 }
 
@@ -267,15 +267,15 @@ model RecordProduct {
   unit         String
 }
 
-model RecordModal {
-  id        Int      @id @default(autoincrement())
-  date      DateTime
-  nominal   Int
-}
-
 model EquityChange {
   id              Int      @id @default(autoincrement())
   user            String
-  transactionId   Int
-  transaction     Transaction  @relation(fields: [transactionId], references: [id])
+  createdAt       DateTime @default(now())
+  transaction     Transaction?
+}
+
+model RecordEquity {
+  id              Int      @id @default(autoincrement())
+  createdAt            DateTime @default(now())
+  nominal         Decimal @default(0)
 }

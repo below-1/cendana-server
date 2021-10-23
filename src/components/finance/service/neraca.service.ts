@@ -4,6 +4,7 @@ import { id as localeId } from 'date-fns/locale'
 import * as DTO from '../finance.dto'
 import { print } from '@cend/components/printer'
 import { rupiah } from '@cend/commons'
+import { hpp } from './hpp.service'
 
 export async function perubahanModal(type: 'JSON' | 'WORD', options: DTO.PerubahanModal.Marker) {
   let startDate = new Date()
@@ -25,8 +26,7 @@ export async function perubahanModal(type: 'JSON' | 'WORD', options: DTO.Perubah
       where o."orderType" = 'PURCHASE'
       and o."createdAt" between '${t0}' and '${t1}'`)
 
-  const [ { total: hppEnd } ] = await prisma.$queryRaw(`
-    select sum(rp.available * rp."sellPrice") total from "RecordProduct" rp where rp."date" = '${t1}'`)
+  const hppEnd = hpp(t1)
 
   const [ { total: totalTool } ] = await prisma.$queryRaw(`   
     select sum(t.nominal) as total from "Transaction" t 
@@ -37,4 +37,5 @@ export async function perubahanModal(type: 'JSON' | 'WORD', options: DTO.Perubah
   const aktivaTetap = totalTool - penyusutanTool
 
   const aktiva = aktivaLancar - aktivaTetap
+  console.log('aktiva = ', aktiva)
 }

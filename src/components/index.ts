@@ -1,3 +1,4 @@
+export * as equity from './equity'
 export * as productCategory from './pcat';
 export * as product from './product';
 export * as user from './user';

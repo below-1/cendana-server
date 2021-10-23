@@ -5,8 +5,18 @@ import * as DTO from '../finance.dto'
 import { print } from '@cend/components/printer'
 import { rupiah } from '@cend/commons'
 
+export interface LabaRugiResult {
+  totalSale: number
+  hpp: number
+  labaKotor: number
+  labaSebelumPajak: number
+  labaBersih: number
+  pajak: number
+  totalOpex: number
+}
 
-export async function labaRugi(type: 'JSON' | 'WORD', options: DTO.LabaRugi.Marker) {
+
+export async function labaRugi(type: 'JSON' | 'WORD', options: DTO.LabaRugi.Marker) : Promise<LabaRugiResult | Buffer> {
   let startDate = new Date()
   startDate = setYear(startDate, options.year)
   startDate = setMonth(startDate, options.month)
@@ -45,14 +55,13 @@ export async function labaRugi(type: 'JSON' | 'WORD', options: DTO.LabaRugi.Mark
   const dateLabel = format(endDate, 'dd MMMM, yyyy', { locale: localeId })
 
   const respData = {
-    totalSale: rupiah(totalSale),
-    hpp: rupiah(hpp),
-    labaKotor: rupiah(labaKotor),
-    labaSebelumPajak: rupiah(labaSebelumPajak),
-    labaBersih: rupiah(labaBersih),
-    pajak: rupiah(options.pajak),
-    totalOpex: rupiah(totalOpex),
-    dateLabel
+    totalSale,
+    hpp,
+    labaKotor,
+    labaSebelumPajak,
+    labaBersih,
+    pajak: options.pajak,
+    totalOpex
   }
 
   if (type == 'JSON') {

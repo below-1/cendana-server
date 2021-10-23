@@ -15,11 +15,11 @@ export async function perubahanModal(type: 'JSON' | 'WORD', options: DTO.Perubah
   const t0 = format(startDate, 'yyyy-MM-dd')
   const t1 = format(endDate, 'yyyy-MM-dd')
 
-  const [ { nominal: modalAwal } ] = await prisma.$queryRaw(`
-    select rm.nominal from "RecordModal" as rm where date = '${t0}'
+  const [ { nominal: modalAwal } ] = await prisma.$queryRaw(` 
+    select re.nominal from "RecordEquity" as re
+      where re."date" <= '${t0}'
   `)
   const modalAkhir = modalAwal + (options.labaBersih - options.prive)
-
   const dateLabel = format(endDate, 'dd MMMM, yyyy', { locale: localeId })
 
   const respData = {

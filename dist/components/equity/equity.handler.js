@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -36,45 +55,55 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.perubahanModal = void 0;
-var prisma_1 = require("@cend/commons/prisma");
-var date_fns_1 = require("date-fns");
-var locale_1 = require("date-fns/locale");
-var printer_1 = require("@cend/components/printer");
-var commons_1 = require("@cend/commons");
-function perubahanModal(type, options) {
+exports.remove = exports.put = exports.post = void 0;
+var services = __importStar(require("./service"));
+function post(request, reply) {
     return __awaiter(this, void 0, void 0, function () {
-        var startDate, endDate, t0, t1, modalAwal, modalAkhir, dateLabel, respData, result;
+        var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    startDate = new Date();
-                    startDate = date_fns_1.setYear(startDate, options.year);
-                    startDate = date_fns_1.setMonth(startDate, options.month);
-                    startDate = date_fns_1.setDate(startDate, 1);
-                    endDate = date_fns_1.lastDayOfMonth(startDate);
-                    t0 = date_fns_1.format(startDate, 'yyyy-MM-dd');
-                    t1 = date_fns_1.format(endDate, 'yyyy-MM-dd');
-                    return [4 /*yield*/, prisma_1.prisma.$queryRaw(" \n    select re.nominal from \"RecordEquity\" as re\n      where re.\"date\" <= '" + t0 + "'\n  ")];
+                case 0: return [4 /*yield*/, services.create(request.body)];
                 case 1:
-                    modalAwal = (_a.sent())[0].nominal;
-                    modalAkhir = modalAwal + (options.labaBersih - options.prive);
-                    dateLabel = date_fns_1.format(endDate, 'dd MMMM, yyyy', { locale: locale_1.id });
-                    respData = {
-                        modalAwal: commons_1.rupiah(modalAwal),
-                        modalAkhir: commons_1.rupiah(modalAkhir),
-                        prive: commons_1.rupiah(options.prive),
-                        labaBersih: commons_1.rupiah(options.labaBersih),
-                        dateLabel: dateLabel
-                    };
-                    if (!(type == 'JSON')) return [3 /*break*/, 2];
-                    return [2 /*return*/, respData];
-                case 2: return [4 /*yield*/, printer_1.print({ path: 'perubahan-modal', data: respData })];
-                case 3:
                     result = _a.sent();
-                    return [2 /*return*/, result];
+                    reply.send(result);
+                    return [2 /*return*/];
             }
         });
     });
 }
-exports.perubahanModal = perubahanModal;
+exports.post = post;
+function put(request, reply) {
+    return __awaiter(this, void 0, void 0, function () {
+        var id, payload, result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    id = request.params.id;
+                    payload = request.body;
+                    return [4 /*yield*/, services.update(id, payload)];
+                case 1:
+                    result = _a.sent();
+                    reply.send(payload);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.put = put;
+function remove(request, reply) {
+    return __awaiter(this, void 0, void 0, function () {
+        var id, result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    id = request.params.id;
+                    return [4 /*yield*/, services.remove(id)];
+                case 1:
+                    result = _a.sent();
+                    reply.send(result);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.remove = remove;

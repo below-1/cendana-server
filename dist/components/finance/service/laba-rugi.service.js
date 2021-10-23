@@ -41,7 +41,6 @@ var prisma_1 = require("@cend/commons/prisma");
 var date_fns_1 = require("date-fns");
 var locale_1 = require("date-fns/locale");
 var printer_1 = require("@cend/components/printer");
-var commons_1 = require("@cend/commons");
 function labaRugi(type, options) {
     return __awaiter(this, void 0, void 0, function () {
         var startDate, endDate, t0, t1, totalSale, hppStart, hppEnd, totalOpex, hpp, labaKotor, labaSebelumPajak, labaBersih, dateLabel, respData, result;
@@ -75,14 +74,13 @@ function labaRugi(type, options) {
                     labaBersih = labaSebelumPajak - options.pajak;
                     dateLabel = date_fns_1.format(endDate, 'dd MMMM, yyyy', { locale: locale_1.id });
                     respData = {
-                        totalSale: commons_1.rupiah(totalSale),
-                        hpp: commons_1.rupiah(hpp),
-                        labaKotor: commons_1.rupiah(labaKotor),
-                        labaSebelumPajak: commons_1.rupiah(labaSebelumPajak),
-                        labaBersih: commons_1.rupiah(labaBersih),
-                        pajak: commons_1.rupiah(options.pajak),
-                        totalOpex: commons_1.rupiah(totalOpex),
-                        dateLabel: dateLabel
+                        totalSale: totalSale,
+                        hpp: hpp,
+                        labaKotor: labaKotor,
+                        labaSebelumPajak: labaSebelumPajak,
+                        labaBersih: labaBersih,
+                        pajak: options.pajak,
+                        totalOpex: totalOpex
                     };
                     if (!(type == 'JSON')) return [3 /*break*/, 5];
                     return [2 /*return*/, respData];

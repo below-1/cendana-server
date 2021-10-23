@@ -31,3 +31,10 @@ export namespace PerubahanModal {
   export type Marker = Static<typeof Obj>
 }
 
+export namespace Neraca {
+  export const Obj = Type.Object({
+    month: Type.Number(),
+    year: Type.Number(),
+    
+  })
+}

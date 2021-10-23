@@ -39,6 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.perubahanModal = void 0;
 var prisma_1 = require("@cend/commons/prisma");
 var date_fns_1 = require("date-fns");
+var hpp_service_1 = require("./hpp.service");
 function perubahanModal(type, options) {
     return __awaiter(this, void 0, void 0, function () {
         var startDate, endDate, t0, t1, totalSale, totalPurchase, hppEnd, totalTool, aktivaLancar, penyusutanTool, aktivaTetap, aktiva;
@@ -58,16 +59,15 @@ function perubahanModal(type, options) {
                     return [4 /*yield*/, prisma_1.prisma.$queryRaw("\n    select sum(o.\"grandTotal\") as total from \"Order\" o \n      where o.\"orderType\" = 'PURCHASE'\n      and o.\"createdAt\" between '" + t0 + "' and '" + t1 + "'")];
                 case 2:
                     totalPurchase = (_a.sent())[0].total;
-                    return [4 /*yield*/, prisma_1.prisma.$queryRaw("\n    select sum(rp.available * rp.\"sellPrice\") total from \"RecordProduct\" rp where rp.\"date\" = '" + t1 + "'")];
-                case 3:
-                    hppEnd = (_a.sent())[0].total;
+                    hppEnd = hpp_service_1.hpp(t1);
                     return [4 /*yield*/, prisma_1.prisma.$queryRaw("   \n    select sum(t.nominal) as total from \"Transaction\" t \n      where t.\"createdAt\" >= '" + t0 + "' and t.\"createdAt\" <= '" + t1 + "' and t.\"opexId\" > 0")];
-                case 4:
+                case 3:
                     totalTool = (_a.sent())[0].total;
                     aktivaLancar = totalSale + totalPurchase + hppEnd;
                     penyusutanTool = totalTool / endDate.getDate();
                     aktivaTetap = totalTool - penyusutanTool;
                     aktiva = aktivaLancar - aktivaTetap;
+                    console.log('aktiva = ', aktiva);
                     return [2 /*return*/];
             }
         });

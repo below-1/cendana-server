@@ -35,46 +35,51 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.perubahanModal = void 0;
+exports.create = void 0;
 var prisma_1 = require("@cend/commons/prisma");
-var date_fns_1 = require("date-fns");
-var locale_1 = require("date-fns/locale");
-var printer_1 = require("@cend/components/printer");
-var commons_1 = require("@cend/commons");
-function perubahanModal(type, options) {
+function create(payload) {
     return __awaiter(this, void 0, void 0, function () {
-        var startDate, endDate, t0, t1, modalAwal, modalAkhir, dateLabel, respData, result;
+        var user, createdAt, transactionData, transaction;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    startDate = new Date();
-                    startDate = date_fns_1.setYear(startDate, options.year);
-                    startDate = date_fns_1.setMonth(startDate, options.month);
-                    startDate = date_fns_1.setDate(startDate, 1);
-                    endDate = date_fns_1.lastDayOfMonth(startDate);
-                    t0 = date_fns_1.format(startDate, 'yyyy-MM-dd');
-                    t1 = date_fns_1.format(endDate, 'yyyy-MM-dd');
-                    return [4 /*yield*/, prisma_1.prisma.$queryRaw(" \n    select re.nominal from \"RecordEquity\" as re\n      where re.\"date\" <= '" + t0 + "'\n  ")];
+                    user = payload.user, createdAt = payload.createdAt, transactionData = __rest(payload, ["user", "createdAt"]);
+                    return [4 /*yield*/, prisma_1.prisma.transaction.create({
+                            data: {
+                                createdAt: payload.createdAt,
+                                type: payload.type,
+                                paymentMethod: payload.paymentMethod,
+                                status: payload.status,
+                                nominal: payload.nominal,
+                                author: {
+                                    connect: {
+                                        id: payload.authorId
+                                    }
+                                },
+                                equityChange: {
+                                    create: {
+                                        user: user
+                                    }
+                                }
+                            }
+                        })];
                 case 1:
-                    modalAwal = (_a.sent())[0].nominal;
-                    modalAkhir = modalAwal + (options.labaBersih - options.prive);
-                    dateLabel = date_fns_1.format(endDate, 'dd MMMM, yyyy', { locale: locale_1.id });
-                    respData = {
-                        modalAwal: commons_1.rupiah(modalAwal),
-                        modalAkhir: commons_1.rupiah(modalAkhir),
-                        prive: commons_1.rupiah(options.prive),
-                        labaBersih: commons_1.rupiah(options.labaBersih),
-                        dateLabel: dateLabel
-                    };
-                    if (!(type == 'JSON')) return [3 /*break*/, 2];
-                    return [2 /*return*/, respData];
-                case 2: return [4 /*yield*/, printer_1.print({ path: 'perubahan-modal', data: respData })];
-                case 3:
-                    result = _a.sent();
-                    return [2 /*return*/, result];
+                    transaction = _a.sent();
+                    return [2 /*return*/, transaction];
             }
         });
     });
 }
-exports.perubahanModal = perubahanModal;
+exports.create = create;
