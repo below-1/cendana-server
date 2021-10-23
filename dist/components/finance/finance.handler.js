@@ -55,7 +55,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLabaRugi = void 0;
+exports.getPerubahanModal = exports.getLabaRugi = void 0;
 var service_1 = require("./service");
 var DTO = __importStar(require("./finance.dto"));
 function getLabaRugi(request, reply) {
@@ -79,3 +79,24 @@ function getLabaRugi(request, reply) {
     });
 }
 exports.getLabaRugi = getLabaRugi;
+function getPerubahanModal(request, reply) {
+    return __awaiter(this, void 0, void 0, function () {
+        var type, result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    type = request.params.type;
+                    return [4 /*yield*/, service_1.perubahanModal(type, request.query)];
+                case 1:
+                    result = _a.sent();
+                    if (type == DTO.RespTypeEnum.WORD) {
+                        reply.type('application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+                        console.log(result);
+                    }
+                    reply.send(result);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.getPerubahanModal = getPerubahanModal;

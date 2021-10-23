@@ -20,3 +20,14 @@ export namespace LabaRugi {
   })
   export type Marker = Static<typeof Obj>
 }
+
+export namespace PerubahanModal {
+  export const Obj = Type.Object({
+    month: Type.Number(),
+    year: Type.Number(),
+    prive: Type.Number(),
+    labaBersih: Type.Number()
+  })
+  export type Marker = Static<typeof Obj>
+}
+

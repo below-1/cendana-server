@@ -215,14 +215,16 @@ model Transaction {
   paymentMethod PaymentMethod
   nominal       Decimal
 
-  order       Order?  @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  orderId     Int?
-  delay       Delay?  @relation(fields: [delayId], references: [id], onDelete: Cascade)
-  delayId     Int?
-  opex        Opex?   @relation(fields: [opexId], references: [id], onDelete: Cascade)
-  opexId      Int?
-  tool        Tool?   @relation(fields: [toolId], references: [id], onDelete: Cascade)
-  toolId      Int?
+  order           Order?  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId         Int?
+  delay           Delay?  @relation(fields: [delayId], references: [id], onDelete: Cascade)
+  delayId         Int?
+  opex            Opex?   @relation(fields: [opexId], references: [id], onDelete: Cascade)
+  opexId          Int?
+  tool            Tool?   @relation(fields: [toolId], references: [id], onDelete: Cascade)
+  toolId          Int?
+  EquityChange    EquityChange?   @relation(fields: [toolId], references: [id], onDelete: Cascade)
+  equityChangeId        Int?
   description String? @db.Text
 }
 
@@ -263,4 +265,17 @@ model RecordProduct {
   stockRecords StockItem[]
   saleRecords  OrderItem[]
   unit         String
+}
+
+model RecordModal {
+  id        Int      @id @default(autoincrement())
+  date      DateTime
+  nominal   Int
+}
+
+model EquityChange {
+  id              Int      @id @default(autoincrement())
+  user            String
+  transactionId   Int
+  transaction     Transaction  @relation(fields: [transactionId], references: [id])
 }

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LabaRugi = exports.RespType = exports.RespTypeEnum = void 0;
+exports.PerubahanModal = exports.LabaRugi = exports.RespType = exports.RespTypeEnum = void 0;
 var typebox_1 = require("@sinclair/typebox");
 var RespTypeEnum;
 (function (RespTypeEnum) {
@@ -21,3 +21,12 @@ var LabaRugi;
         pajak: typebox_1.Type.Number()
     });
 })(LabaRugi = exports.LabaRugi || (exports.LabaRugi = {}));
+var PerubahanModal;
+(function (PerubahanModal) {
+    PerubahanModal.Obj = typebox_1.Type.Object({
+        month: typebox_1.Type.Number(),
+        year: typebox_1.Type.Number(),
+        prive: typebox_1.Type.Number(),
+        labaBersih: typebox_1.Type.Number()
+    });
+})(PerubahanModal = exports.PerubahanModal || (exports.PerubahanModal = {}));

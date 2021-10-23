@@ -13,4 +13,13 @@ export async function plugin(fastify: FastifyInstance) {
     handler: handlers.getLabaRugi
   })
 
+  fastify.get('/perubahan-modal/:type', {
+    schema: {
+      tags: ['finance'],
+      querystring: DTO.PerubahanModal.Obj,
+      params: DTO.RespType.Obj
+    },
+    handler: handlers.getPerubahanModal
+  })
+
 }
