@@ -9,6 +9,7 @@ export * as stockItem from './sitem';
 export * as delay from './delay';
 export * as opex from './opex';
 export * as opexTrans from './opex-trans'
+export * as investment from './investment';
 export * as tool from './tool';
 export * as toolTrans from './tool-trans'
 export * as orderItem from './oitem';

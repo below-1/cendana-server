@@ -45,6 +45,7 @@ export function createServer() {
   server.register(components.summary.plugin, { prefix: '/v1/api/summary' })
   server.register(components.finance.plugin, { prefix: '/v1/api/finance' })
   server.register(components.equity.plugin, { prefix: '/v1/api/equity' })
+  server.register(components.investment.plugin, { prefix: '/v1/api/investment' })
 
   return server
 }

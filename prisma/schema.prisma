@@ -225,6 +225,9 @@ model Transaction {
   toolId          Int?
   equityChange    EquityChange?   @relation(fields: [equityChangeId], references: [id], onDelete: Cascade)
   equityChangeId  Int?
+  investment            Investment?   @relation(fields: [investmentId], references: [id], onDelete: Cascade)
+  investmentId          Int?
+
   description String? @db.Text
 }
 
@@ -278,4 +281,13 @@ model RecordEquity {
   id              Int      @id @default(autoincrement())
   createdAt            DateTime @default(now())
   nominal         Decimal @default(0)
+}
+
+model Investment {
+  id              Int      @id @default(autoincrement())
+  title           String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  description String?       @db.Text
+  transaction Transaction[]
 }

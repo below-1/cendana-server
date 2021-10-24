@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.finance = exports.summary = exports.latestStock = exports.transaction = exports.orderItem = exports.toolTrans = exports.tool = exports.opexTrans = exports.opex = exports.delay = exports.stockItem = exports.sale = exports.purchase = exports.auth = exports.user = exports.product = exports.productCategory = exports.equity = void 0;
+exports.finance = exports.summary = exports.latestStock = exports.transaction = exports.orderItem = exports.toolTrans = exports.tool = exports.investment = exports.opexTrans = exports.opex = exports.delay = exports.stockItem = exports.sale = exports.purchase = exports.auth = exports.user = exports.product = exports.productCategory = exports.equity = void 0;
 exports.equity = __importStar(require("./equity"));
 exports.productCategory = __importStar(require("./pcat"));
 exports.product = __importStar(require("./product"));
@@ -31,6 +31,7 @@ exports.stockItem = __importStar(require("./sitem"));
 exports.delay = __importStar(require("./delay"));
 exports.opex = __importStar(require("./opex"));
 exports.opexTrans = __importStar(require("./opex-trans"));
+exports.investment = __importStar(require("./investment"));
 exports.tool = __importStar(require("./tool"));
 exports.toolTrans = __importStar(require("./tool-trans"));
 exports.orderItem = __importStar(require("./oitem"));
