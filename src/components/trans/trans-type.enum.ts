@@ -5,5 +5,6 @@ export enum TransType {
   AR_PAYMENT = 'AR_PAYMENT',
   AP_PAYMENT = 'AP_PAYMENT',
   TOOL = 'TOOL',
-  ALL = 'ALL'
+  ALL = 'ALL',
+  EQUITY_CHANGE = 'EQUITY_CHANGE'
 }

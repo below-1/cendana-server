@@ -51,13 +51,13 @@ exports.update = void 0;
 var prisma_1 = require("@cend/commons/prisma");
 function update(id, payload) {
     return __awaiter(this, void 0, void 0, function () {
-        var user, createdAt, transactionData, transaction;
+        var user, createdAt, transactionId, transactionData, transaction;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    user = payload.user, createdAt = payload.createdAt, transactionData = __rest(payload, ["user", "createdAt"]);
+                    user = payload.user, createdAt = payload.createdAt, transactionId = payload.transactionId, transactionData = __rest(payload, ["user", "createdAt", "transactionId"]);
                     return [4 /*yield*/, prisma_1.prisma.transaction.update({
-                            where: { id: id },
+                            where: { id: transactionId },
                             data: {
                                 createdAt: payload.createdAt,
                                 type: payload.type,
@@ -70,7 +70,7 @@ function update(id, payload) {
                                     }
                                 },
                                 equityChange: {
-                                    create: {
+                                    update: {
                                         user: user
                                     }
                                 }

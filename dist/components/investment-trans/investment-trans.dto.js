@@ -6,25 +6,21 @@ var client_1 = require("@prisma/client");
 var Create;
 (function (Create) {
     Create.Obj = typebox_1.Type.Object({
-        user: typebox_1.Type.String(),
-        nominal: typebox_1.Type.String(),
+        investmentId: typebox_1.Type.Number(),
         authorId: typebox_1.Type.Number(),
         createdAt: typebox_1.Type.Optional(typebox_1.Type.String({ format: 'date-time' })),
+        nominal: typebox_1.Type.String(),
         status: typebox_1.Type.Enum(client_1.TransactionStatus),
-        paymentMethod: typebox_1.Type.Enum(client_1.PaymentMethod),
-        type: typebox_1.Type.Enum(client_1.TransactionType)
+        paymentMethod: typebox_1.Type.Enum(client_1.PaymentMethod)
     });
 })(Create = exports.Create || (exports.Create = {}));
 var Update;
 (function (Update) {
     Update.Obj = typebox_1.Type.Object({
-        user: typebox_1.Type.String(),
-        nominal: typebox_1.Type.String(),
-        authorId: typebox_1.Type.Number(),
-        transactionId: typebox_1.Type.Number(),
+        investmentId: typebox_1.Type.Number(),
         createdAt: typebox_1.Type.Optional(typebox_1.Type.String({ format: 'date-time' })),
+        nominal: typebox_1.Type.String(),
         status: typebox_1.Type.Enum(client_1.TransactionStatus),
-        paymentMethod: typebox_1.Type.Enum(client_1.PaymentMethod),
-        type: typebox_1.Type.Enum(client_1.TransactionType)
+        paymentMethod: typebox_1.Type.Enum(client_1.PaymentMethod)
     });
 })(Update = exports.Update || (exports.Update = {}));

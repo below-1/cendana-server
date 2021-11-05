@@ -22,4 +22,12 @@ export async function plugin(fastify: FastifyInstance) {
     handler: handlers.getPerubahanModal
   })
 
+  fastify.post('/snapshot', {
+    schema: {
+      tags: ['finance'],
+      querystring: DTO.Snapshot.Obj
+    },
+    handler: handlers.postSnapshot
+  })
+
 }

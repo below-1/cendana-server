@@ -21,6 +21,8 @@ export async function perubahanModal(type: 'JSON' | 'WORD', options: DTO.Perubah
       where o."orderType" = 'SALE'
       and o."createdAt" between '${t0}' and '${t1}'`)
 
+  // Get delay payment for selected month
+
   const [ { total: totalPurchase } ] = await prisma.$queryRaw(`
     select sum(o."grandTotal") as total from "Order" o 
       where o."orderType" = 'PURCHASE'

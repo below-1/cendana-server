@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Neraca = exports.PerubahanModal = exports.LabaRugi = exports.RespType = exports.RespTypeEnum = void 0;
+exports.Snapshot = exports.Neraca = exports.PerubahanModal = exports.LabaRugi = exports.RespType = exports.RespTypeEnum = void 0;
 var typebox_1 = require("@sinclair/typebox");
 var RespTypeEnum;
 (function (RespTypeEnum) {
@@ -37,3 +37,9 @@ var Neraca;
         year: typebox_1.Type.Number(),
     });
 })(Neraca = exports.Neraca || (exports.Neraca = {}));
+var Snapshot;
+(function (Snapshot) {
+    Snapshot.Obj = typebox_1.Type.Object({
+        target: typebox_1.Type.String({ format: 'date' })
+    });
+})(Snapshot = exports.Snapshot || (exports.Snapshot = {}));

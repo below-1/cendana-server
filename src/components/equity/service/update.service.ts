@@ -10,10 +10,11 @@ export async function update(id: number, payload: DTO.Update.Marker) {
   const {
     user,
     createdAt,
+    transactionId,
     ...transactionData
   } = payload
   const transaction = await prisma.transaction.update({
-    where: { id },
+    where: { id: transactionId },
     data: {
       createdAt: payload.createdAt,
       type: payload.type,
@@ -26,7 +27,7 @@ export async function update(id: number, payload: DTO.Update.Marker) {
         }
       },
       equityChange: {
-        create: {
+        update: {
           user
         }
       }

@@ -36,43 +36,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.perubahanModal = void 0;
-var prisma_1 = require("@cend/commons/prisma");
-var date_fns_1 = require("date-fns");
-var hpp_service_1 = require("./hpp.service");
-function perubahanModal(type, options) {
+exports.snapshot = void 0;
+function snapshot() {
     return __awaiter(this, void 0, void 0, function () {
-        var startDate, endDate, t0, t1, totalSale, totalPurchase, hppEnd, totalTool, aktivaLancar, penyusutanTool, aktivaTetap, aktiva;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    startDate = new Date();
-                    startDate = date_fns_1.setYear(startDate, options.year);
-                    startDate = date_fns_1.setMonth(startDate, options.month);
-                    startDate = date_fns_1.setDate(startDate, 1);
-                    endDate = date_fns_1.lastDayOfMonth(startDate);
-                    t0 = date_fns_1.format(startDate, 'yyyy-MM-dd');
-                    t1 = date_fns_1.format(endDate, 'yyyy-MM-dd');
-                    return [4 /*yield*/, prisma_1.prisma.$queryRaw("\n    select sum(o.\"grandTotal\") as total from \"Order\" o \n      where o.\"orderType\" = 'SALE'\n      and o.\"createdAt\" between '" + t0 + "' and '" + t1 + "'")
-                        // Get delay payment for selected month
-                    ];
-                case 1:
-                    totalSale = (_a.sent())[0].total;
-                    return [4 /*yield*/, prisma_1.prisma.$queryRaw("\n    select sum(o.\"grandTotal\") as total from \"Order\" o \n      where o.\"orderType\" = 'PURCHASE'\n      and o.\"createdAt\" between '" + t0 + "' and '" + t1 + "'")];
-                case 2:
-                    totalPurchase = (_a.sent())[0].total;
-                    hppEnd = hpp_service_1.hpp(t1);
-                    return [4 /*yield*/, prisma_1.prisma.$queryRaw("   \n    select sum(t.nominal) as total from \"Transaction\" t \n      where t.\"createdAt\" >= '" + t0 + "' and t.\"createdAt\" <= '" + t1 + "' and t.\"opexId\" > 0")];
-                case 3:
-                    totalTool = (_a.sent())[0].total;
-                    aktivaLancar = totalSale + totalPurchase + hppEnd;
-                    penyusutanTool = totalTool / endDate.getDate();
-                    aktivaTetap = totalTool - penyusutanTool;
-                    aktiva = aktivaLancar - aktivaTetap;
-                    console.log('aktiva = ', aktiva);
-                    return [2 /*return*/];
-            }
+            return [2 /*return*/];
         });
     });
 }
-exports.perubahanModal = perubahanModal;
+exports.snapshot = snapshot;

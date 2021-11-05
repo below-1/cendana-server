@@ -55,65 +55,44 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postSnapshot = exports.getPerubahanModal = exports.getLabaRugi = void 0;
-var service_1 = require("./service");
-var DTO = __importStar(require("./finance.dto"));
-function getLabaRugi(request, reply) {
+exports.plugin = void 0;
+var DTO = __importStar(require("./investment-trans.dto"));
+var request_1 = require("@cend/commons/request");
+var handlers = __importStar(require("./investment-trans.handler"));
+function plugin(fastify) {
     return __awaiter(this, void 0, void 0, function () {
-        var type, result;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    type = request.params.type;
-                    return [4 /*yield*/, service_1.labaRugi(type, request.query)];
-                case 1:
-                    result = _a.sent();
-                    if (type == DTO.RespTypeEnum.WORD) {
-                        reply.type('application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-                        console.log(result);
-                    }
-                    reply.send(result);
-                    return [2 /*return*/];
-            }
+            fastify.post('/', {
+                handler: handlers.post,
+                schema: {
+                    tags: ['investments'],
+                    body: DTO.Create.Obj
+                }
+            });
+            fastify.put('/:id', {
+                handler: handlers.put,
+                schema: {
+                    tags: ['investments'],
+                    body: DTO.Update.Obj,
+                    params: request_1.ID.Obj
+                }
+            });
+            fastify.delete('/:id', {
+                handler: handlers.remove,
+                schema: {
+                    tags: ['investments'],
+                    params: request_1.ID.Obj
+                }
+            });
+            fastify.get('/:id', {
+                handler: handlers.getOne,
+                schema: {
+                    tags: ['investments'],
+                    params: request_1.ID.Obj
+                }
+            });
+            return [2 /*return*/];
         });
     });
 }
-exports.getLabaRugi = getLabaRugi;
-function getPerubahanModal(request, reply) {
-    return __awaiter(this, void 0, void 0, function () {
-        var type, result;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    type = request.params.type;
-                    return [4 /*yield*/, service_1.perubahanModal(type, request.query)];
-                case 1:
-                    result = _a.sent();
-                    if (type == DTO.RespTypeEnum.WORD) {
-                        reply.type('application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-                        console.log(result);
-                    }
-                    reply.send(result);
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-exports.getPerubahanModal = getPerubahanModal;
-function postSnapshot(request, reply) {
-    return __awaiter(this, void 0, void 0, function () {
-        var date;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    date = new Date(request.query.target);
-                    return [4 /*yield*/, service_1.snapshot(date)];
-                case 1:
-                    _a.sent();
-                    reply.send({ message: 'OK' });
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-exports.postSnapshot = postSnapshot;
+exports.plugin = plugin;

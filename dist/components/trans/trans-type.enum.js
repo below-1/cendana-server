@@ -10,4 +10,5 @@ var TransType;
     TransType["AP_PAYMENT"] = "AP_PAYMENT";
     TransType["TOOL"] = "TOOL";
     TransType["ALL"] = "ALL";
+    TransType["EQUITY_CHANGE"] = "EQUITY_CHANGE";
 })(TransType = exports.TransType || (exports.TransType = {}));

@@ -94,6 +94,11 @@ function findTransactions(t, options) {
                                 { delay: { type: client_1.DelayType.RECEIVABLE } }
                             ]);
                             break;
+                        case trans_type_enum_1.TransType.EQUITY_CHANGE:
+                            conditions = __spreadArray(__spreadArray([], conditions), [
+                                { equityChangeId: { gte: 1 } }
+                            ]);
+                            break;
                         case trans_type_enum_1.TransType.ALL:
                             break;
                         default:
@@ -116,7 +121,8 @@ function findTransactions(t, options) {
                                 opex: true,
                                 tool: true,
                                 order: true,
-                                author: true
+                                author: true,
+                                equityChange: true
                             },
                             orderBy: {
                                 createdAt: 'desc'

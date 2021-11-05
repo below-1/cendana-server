@@ -77,6 +77,13 @@ function plugin(fastify) {
                 },
                 handler: handlers.getPerubahanModal
             });
+            fastify.post('/snapshot', {
+                schema: {
+                    tags: ['finance'],
+                    querystring: DTO.Snapshot.Obj
+                },
+                handler: handlers.postSnapshot
+            });
             return [2 /*return*/];
         });
     });

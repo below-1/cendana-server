@@ -55,65 +55,76 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postSnapshot = exports.getPerubahanModal = exports.getLabaRugi = void 0;
-var service_1 = require("./service");
-var DTO = __importStar(require("./finance.dto"));
-function getLabaRugi(request, reply) {
+exports.getOne = exports.remove = exports.put = exports.post = void 0;
+var services = __importStar(require("./service"));
+function post(request, reply) {
     return __awaiter(this, void 0, void 0, function () {
-        var type, result;
+        var payload, trans;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    type = request.params.type;
-                    return [4 /*yield*/, service_1.labaRugi(type, request.query)];
+                    payload = request.body;
+                    return [4 /*yield*/, services.create(payload)];
                 case 1:
-                    result = _a.sent();
-                    if (type == DTO.RespTypeEnum.WORD) {
-                        reply.type('application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-                        console.log(result);
+                    trans = _a.sent();
+                    reply.send(trans);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.post = post;
+function put(request, reply) {
+    return __awaiter(this, void 0, void 0, function () {
+        var id, payload, trans;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    id = request.params.id;
+                    payload = request.body;
+                    return [4 /*yield*/, services.update(id, payload)];
+                case 1:
+                    trans = _a.sent();
+                    reply.send(trans);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.put = put;
+function remove(request, reply) {
+    return __awaiter(this, void 0, void 0, function () {
+        var id, trans;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    id = request.params.id;
+                    return [4 /*yield*/, services.remove(id)];
+                case 1:
+                    trans = _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.remove = remove;
+function getOne(request, reply) {
+    return __awaiter(this, void 0, void 0, function () {
+        var id, trans;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    id = request.params.id;
+                    return [4 /*yield*/, services.findOne(id)];
+                case 1:
+                    trans = _a.sent();
+                    if (!trans) {
+                        throw new Error("Opex(" + id + ") can't be found");
                     }
-                    reply.send(result);
+                    reply.send(trans);
                     return [2 /*return*/];
             }
         });
     });
 }
-exports.getLabaRugi = getLabaRugi;
-function getPerubahanModal(request, reply) {
-    return __awaiter(this, void 0, void 0, function () {
-        var type, result;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    type = request.params.type;
-                    return [4 /*yield*/, service_1.perubahanModal(type, request.query)];
-                case 1:
-                    result = _a.sent();
-                    if (type == DTO.RespTypeEnum.WORD) {
-                        reply.type('application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-                        console.log(result);
-                    }
-                    reply.send(result);
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-exports.getPerubahanModal = getPerubahanModal;
-function postSnapshot(request, reply) {
-    return __awaiter(this, void 0, void 0, function () {
-        var date;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    date = new Date(request.query.target);
-                    return [4 /*yield*/, service_1.snapshot(date)];
-                case 1:
-                    _a.sent();
-                    reply.send({ message: 'OK' });
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-exports.postSnapshot = postSnapshot;
+exports.getOne = getOne;

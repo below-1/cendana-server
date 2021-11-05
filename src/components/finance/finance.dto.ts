@@ -38,3 +38,11 @@ export namespace Neraca {
     
   })
 }
+
+
+export namespace Snapshot {
+  export const Obj = Type.Object({
+    target: Type.String({ format: 'date' })
+  })
+  export type Marker = Static<typeof Obj>
+}

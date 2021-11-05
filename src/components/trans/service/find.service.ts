@@ -73,6 +73,13 @@ export async function findTransactions(t: TransType, options: FindOptions) {
       ]
       break;
 
+    case TransType.EQUITY_CHANGE:
+      conditions = [
+        ...conditions,
+        { equityChangeId: { gte: 1 } }
+      ]
+      break;
+
     case TransType.ALL:
       break;
 
@@ -101,7 +108,8 @@ export async function findTransactions(t: TransType, options: FindOptions) {
       opex: true,
       tool: true,
       order: true,
-      author: true
+      author: true,
+      equityChange: true
     },
     orderBy: {
       createdAt: 'desc'
