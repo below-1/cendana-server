@@ -44,7 +44,7 @@ export async function labaRugi(type: 'JSON' | 'WORD', options: DTO.LabaRugi.Mark
 
   // console.log('hppStart = ', hppStart)
   const hpp = hppStart - hppEnd
-  // console.log('hpp = ', hpp)
+  console.log('hpp = ', hpp)
   const labaKotor = totalSale - hpp
   // console.log('labaKotor = ', labaKotor)
   const labaSebelumPajak = labaKotor - totalOpex

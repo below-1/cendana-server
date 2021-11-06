@@ -40,11 +40,23 @@ async function snapshotEquity(target: Date) {
     t0 = previousRecord.createdAt
   }
 
-  const [ { total } ] = await prisma.$queryRaw`select 
-    sum(ec.nominal) as total 
-    from "EquityChange" as ec 
-    where "createdAt" > ${t0} and "createdAt" <= ${t1}`
-  const nominal = initial.plus(new Decimal(total))
+  const [ { total: totalCredit } ] = await prisma.$queryRaw`
+    select coalesce(sum(t_credit.nominal), 0) as total 
+      from "EquityChange" as ec 
+      left join "Transaction" as t_credit on t_credit."equityChangeId" = ec.id and t_credit."type" = 'CREDIT'
+      where ec."createdAt" > ${t0} and ec."createdAt" <= ${t1}
+  `
+
+  const [ { total: totalDebit } ] = await prisma.$queryRaw`
+    select coalesce(sum(t_debit.nominal), 0) as total 
+      from "EquityChange" as ec 
+      left join "Transaction" as t_debit on t_debit."equityChangeId" = ec.id and t_debit."type" = 'DEBIT'
+      where ec."createdAt" > ${t0} and ec."createdAt" <= ${t1}
+  `
+
+  const total = new Decimal(totalCredit).sub(new Decimal(totalDebit))
+
+  const nominal = initial.plus(total)
 
   await prisma.recordEquity.deleteMany({
     where: {

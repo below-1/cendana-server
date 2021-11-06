@@ -93,7 +93,7 @@ function snapshotInventory(target) {
 }
 function snapshotEquity(target) {
     return __awaiter(this, void 0, void 0, function () {
-        var initial, t0, t1, previousRecord, total, nominal;
+        var initial, t0, t1, previousRecord, totalCredit, totalDebit, total, nominal;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -116,16 +116,20 @@ function snapshotEquity(target) {
                         initial = initial.plus(previousRecord.nominal);
                         t0 = previousRecord.createdAt;
                     }
-                    return [4 /*yield*/, prisma_1.prisma.$queryRaw(templateObject_2 || (templateObject_2 = __makeTemplateObject(["select \n    sum(ec.nominal) as total \n    from \"EquityChange\" as ec \n    where \"createdAt\" > ", " and \"createdAt\" <= ", ""], ["select \n    sum(ec.nominal) as total \n    from \"EquityChange\" as ec \n    where \"createdAt\" > ", " and \"createdAt\" <= ", ""])), t0, t1)];
+                    return [4 /*yield*/, prisma_1.prisma.$queryRaw(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n    select coalesce(sum(t_credit.nominal), 0) as total \n      from \"EquityChange\" as ec \n      left join \"Transaction\" as t_credit on t_credit.\"equityChangeId\" = ec.id and t_credit.\"type\" = 'CREDIT'\n      where ec.\"createdAt\" > ", " and ec.\"createdAt\" <= ", "\n  "], ["\n    select coalesce(sum(t_credit.nominal), 0) as total \n      from \"EquityChange\" as ec \n      left join \"Transaction\" as t_credit on t_credit.\"equityChangeId\" = ec.id and t_credit.\"type\" = 'CREDIT'\n      where ec.\"createdAt\" > ", " and ec.\"createdAt\" <= ", "\n  "])), t0, t1)];
                 case 2:
-                    total = (_a.sent())[0].total;
-                    nominal = initial.plus(new runtime_1.Decimal(total));
+                    totalCredit = (_a.sent())[0].total;
+                    return [4 /*yield*/, prisma_1.prisma.$queryRaw(templateObject_3 || (templateObject_3 = __makeTemplateObject(["\n    select coalesce(sum(t_debit.nominal), 0) as total \n      from \"EquityChange\" as ec \n      left join \"Transaction\" as t_debit on t_debit.\"equityChangeId\" = ec.id and t_debit.\"type\" = 'DEBIT'\n      where ec.\"createdAt\" > ", " and ec.\"createdAt\" <= ", "\n  "], ["\n    select coalesce(sum(t_debit.nominal), 0) as total \n      from \"EquityChange\" as ec \n      left join \"Transaction\" as t_debit on t_debit.\"equityChangeId\" = ec.id and t_debit.\"type\" = 'DEBIT'\n      where ec.\"createdAt\" > ", " and ec.\"createdAt\" <= ", "\n  "])), t0, t1)];
+                case 3:
+                    totalDebit = (_a.sent())[0].total;
+                    total = new runtime_1.Decimal(totalCredit).sub(new runtime_1.Decimal(totalDebit));
+                    nominal = initial.plus(total);
                     return [4 /*yield*/, prisma_1.prisma.recordEquity.deleteMany({
                             where: {
                                 createdAt: target
                             }
                         })];
-                case 3:
+                case 4:
                     _a.sent();
                     return [4 /*yield*/, prisma_1.prisma.recordEquity.create({
                             data: {
@@ -133,7 +137,7 @@ function snapshotEquity(target) {
                                 nominal: nominal
                             }
                         })];
-                case 4:
+                case 5:
                     _a.sent();
                     return [2 /*return*/];
             }
@@ -156,4 +160,4 @@ function snapshot(target) {
     });
 }
 exports.snapshot = snapshot;
-var templateObject_1, templateObject_2;
+var templateObject_1, templateObject_2, templateObject_3;

@@ -69,6 +69,7 @@ function labaRugi(type, options) {
                 case 4:
                     totalOpex = (_a.sent())[0].total;
                     hpp = hppStart - hppEnd;
+                    console.log('hpp = ', hpp);
                     labaKotor = totalSale - hpp;
                     labaSebelumPajak = labaKotor - totalOpex;
                     labaBersih = labaSebelumPajak - options.pajak;
