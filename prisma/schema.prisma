@@ -291,3 +291,41 @@ model Investment {
   description String?       @db.Text
   transaction Transaction[]
 }
+
+model FinanceReport {
+  target                DateTime    @id
+
+  totalPenjualan                 Decimal?
+  hpp                   Decimal?
+  labaKotor             Decimal?
+  opex                  Decimal?
+  labaSebelumPajak      Decimal?
+  pajak                 Decimal?
+  labaBersih            Decimal?
+
+  kas                   Decimal?
+  piutang               Decimal?
+  persediaan            Decimal?
+  aktivaLancar          Decimal?
+
+  peralatan             Decimal?
+  akumulasiPeralatan    Decimal?
+  aktivaTetap           Decimal?
+
+  passiva               Decimal?
+
+  utangDagang           Decimal?
+  modalAwal             Decimal?
+  modalAkhir             Decimal?
+  totalRetur            Decimal?
+  pembelianBarangDagang     Decimal?
+  totalBiayaPengeluaran     Decimal?
+  pajakUsaha                Decimal?
+  kendaraanBaru         Decimal?
+  investasi             Decimal?
+  penambahanModalUsaha  Decimal?
+  pengembalianHutangModal   Decimal?
+
+  arusKasOperasional      Decimal?
+  arusKasInvestasi        Decimal?
+}

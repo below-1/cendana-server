@@ -54,6 +54,12 @@ export async function labaRugi(type: 'JSON' | 'WORD', options: DTO.LabaRugi.Mark
 
   const dateLabel = format(endDate, 'dd MMMM, yyyy', { locale: localeId })
 
+  // prisma.financeReport.create({
+  //   data: {
+      
+  //   }
+  // })
+
   const respData = {
     totalSale,
     hpp,

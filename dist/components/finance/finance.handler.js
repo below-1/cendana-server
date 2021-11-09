@@ -55,7 +55,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postSnapshot = exports.getPerubahanModal = exports.getLabaRugi = void 0;
+exports.postReport = exports.postSnapshot = exports.getPerubahanModal = exports.getLabaRugi = void 0;
 var service_1 = require("./service");
 var DTO = __importStar(require("./finance.dto"));
 function getLabaRugi(request, reply) {
@@ -117,3 +117,20 @@ function postSnapshot(request, reply) {
     });
 }
 exports.postSnapshot = postSnapshot;
+function postReport(request, reply) {
+    return __awaiter(this, void 0, void 0, function () {
+        var options, result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    options = request.body;
+                    return [4 /*yield*/, service_1.createReport(options)];
+                case 1:
+                    result = _a.sent();
+                    reply.send(result);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.postReport = postReport;

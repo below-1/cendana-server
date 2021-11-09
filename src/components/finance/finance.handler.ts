@@ -1,5 +1,5 @@
 import { FastifyRequest as Request, FastifyReply as Reply } from 'fastify'
-import { labaRugi, perubahanModal, snapshot } from './service'
+import { labaRugi, perubahanModal, snapshot, createReport } from './service'
 import * as DTO from './finance.dto';
 
 type ResponseType = 'word' | 'json'
@@ -17,6 +17,10 @@ export type GetPerubahanModal = Request<{
 export type PostSnapshotRequest = Request<{
   Querystring: DTO.Snapshot.Marker
 }>;
+
+export type PostReportRequest = Request<{
+  Body: DTO.Report.Marker
+}>
 
 export async function getLabaRugi(request: GetLabaRugi, reply: Reply) {
   const { type } = request.params
@@ -42,4 +46,10 @@ export async function postSnapshot(request: PostSnapshotRequest, reply: Reply) {
   const date = new Date(request.query.target)
   await snapshot(date)
   reply.send({ message: 'OK' })
+}
+
+export async function postReport(request: PostReportRequest, reply: Reply) {
+  const options = request.body
+  const result = await createReport(options)
+  reply.send(result)
 }

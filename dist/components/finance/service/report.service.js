@@ -36,12 +36,116 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.genReport = void 0;
-function genReport() {
+exports.createReport = void 0;
+var prisma_1 = require("@cend/commons/prisma");
+var date_fns_1 = require("date-fns");
+var locale_1 = require("date-fns/locale");
+function createReport(options) {
     return __awaiter(this, void 0, void 0, function () {
+        var startDate, endDate, dateLabel, t0, t1, totalSale, piutang, hppStart, hppEnd, persediaan, pembelianBarangDagang, totalOpex, modalAwal, utangDagang, prive, peralatan, investment, hpp, labaKotor, labaSebelumPajak, labaBersih, modalAkhir, penyusutanTool, aktivaLancar, aktivaTetap, passiva, err_1, report;
         return __generator(this, function (_a) {
-            return [2 /*return*/];
+            switch (_a.label) {
+                case 0:
+                    startDate = new Date();
+                    startDate = date_fns_1.setYear(startDate, options.year);
+                    startDate = date_fns_1.setMonth(startDate, options.month);
+                    startDate = date_fns_1.setDate(startDate, 1);
+                    endDate = date_fns_1.lastDayOfMonth(startDate);
+                    dateLabel = date_fns_1.format(endDate, 'dd MMMM, yyyy', { locale: locale_1.id });
+                    t0 = date_fns_1.format(startDate, 'yyyy-MM-dd');
+                    t1 = date_fns_1.format(endDate, 'yyyy-MM-dd');
+                    return [4 /*yield*/, prisma_1.prisma.$queryRaw("\n    select sum(t.\"nominal\") as total from \"Order\" o \n      join \"Transaction\" t on t.\"orderId\" = o.id\n      where o.\"orderType\" = 'SALE'\n      and o.\"createdAt\" between '" + t0 + "' and '" + t1 + "'")];
+                case 1:
+                    totalSale = (_a.sent())[0].total;
+                    return [4 /*yield*/, prisma_1.prisma.$queryRaw("\n    select coalesce(sum(d.total), 0) as total\n      from \"Delay\" d\n      where \n        d.type = 'RECEIVABLE'\n        and d.\"createdAt\" between '" + t0 + "' and '" + t1 + "'")];
+                case 2:
+                    piutang = (_a.sent())[0].total;
+                    return [4 /*yield*/, prisma_1.prisma.$queryRaw("\n    select coalesce(sum(rp.available * rp.\"sellPrice\"), 0) as total \n      from \"RecordProduct\" rp where rp.\"date\" = '" + t0 + "'")];
+                case 3:
+                    hppStart = (_a.sent())[0].total;
+                    return [4 /*yield*/, prisma_1.prisma.$queryRaw("\n    select sum(rp.available * rp.\"sellPrice\") total from \"RecordProduct\" rp where rp.\"date\" = '" + t1 + "'")];
+                case 4:
+                    hppEnd = (_a.sent())[0].total;
+                    return [4 /*yield*/, prisma_1.prisma.$queryRaw("\n    select sum(p.available * p.\"sellPrice\") as total from \"Product\" p")];
+                case 5:
+                    persediaan = (_a.sent())[0].total;
+                    return [4 /*yield*/, prisma_1.prisma.$queryRaw("\n    select sum(p.available * p.\"buyPrice\") as total from \"Product\" p")];
+                case 6:
+                    pembelianBarangDagang = (_a.sent())[0].total;
+                    return [4 /*yield*/, prisma_1.prisma.$queryRaw("\n    select coalesce(sum(t.nominal), 0) as total from \"Transaction\" t \n      where t.\"createdAt\" >= '" + t0 + "' and t.\"createdAt\" <= '" + t1 + "' and t.\"opexId\" > 0")];
+                case 7:
+                    totalOpex = (_a.sent())[0].total;
+                    return [4 /*yield*/, prisma_1.prisma.$queryRaw(" \n    select coalesce(re.nominal, 0) from \"RecordEquity\" as re\n      where re.\"createdAt\" <= '" + t0 + "'\n  ")];
+                case 8:
+                    modalAwal = (_a.sent())[0].nominal;
+                    return [4 /*yield*/, prisma_1.prisma.$queryRaw("\n    select coalesce(sum(o.\"grandTotal\"), 0) as total from \"Order\" o \n      where o.\"orderType\" = 'BUY'\n      and o.\"createdAt\" between '" + t0 + "' and '" + t1 + "'")];
+                case 9:
+                    utangDagang = (_a.sent())[0].total;
+                    return [4 /*yield*/, prisma_1.prisma.$queryRaw(" \n    select coalesce(sum(t.nominal), 0) as total from \"EquityChange\" as ec\n      left join \"Transaction\" t on t.\"equityChangeId\" = ec.id\n      where t.\"createdAt\" >= '" + t0 + "' AND t.\"createdAt\" <= '" + t1 + "'\n  ")];
+                case 10:
+                    prive = (_a.sent())[0].total;
+                    return [4 /*yield*/, prisma_1.prisma.$queryRaw("   \n    select sum(t.nominal) as total from \"Transaction\" t \n      where t.\"createdAt\" >= '" + t0 + "' and t.\"createdAt\" <= '" + t1 + "' and t.\"toolId\" > 0")];
+                case 11:
+                    peralatan = (_a.sent())[0].total;
+                    return [4 /*yield*/, prisma_1.prisma.$queryRaw("   \n    select sum(t.nominal) as total from \"Transaction\" t \n      where t.\"createdAt\" >= '" + t0 + "' and t.\"createdAt\" <= '" + t1 + "' and t.\"investmentId\" > 0")
+                        // console.log('totalSale = ', totalSale)
+                        // console.log('hppStart = ', hppStart)
+                    ];
+                case 12:
+                    investment = (_a.sent())[0].total;
+                    hpp = hppStart - hppEnd;
+                    labaKotor = totalSale - hpp;
+                    labaSebelumPajak = labaKotor - totalOpex;
+                    labaBersih = labaSebelumPajak - options.pajak;
+                    modalAkhir = modalAwal + (labaBersih - prive);
+                    penyusutanTool = peralatan / endDate.getDate();
+                    aktivaLancar = totalSale + piutang + persediaan;
+                    aktivaTetap = peralatan - penyusutanTool;
+                    passiva = utangDagang + modalAkhir;
+                    _a.label = 13;
+                case 13:
+                    _a.trys.push([13, 15, , 16]);
+                    return [4 /*yield*/, prisma_1.prisma.financeReport.delete({
+                            where: {
+                                target: endDate
+                            }
+                        })];
+                case 14:
+                    _a.sent();
+                    return [3 /*break*/, 16];
+                case 15:
+                    err_1 = _a.sent();
+                    return [3 /*break*/, 16];
+                case 16: return [4 /*yield*/, prisma_1.prisma.financeReport.create({
+                        data: {
+                            target: endDate,
+                            totalPenjualan: totalSale,
+                            hpp: hpp,
+                            labaKotor: labaKotor,
+                            labaBersih: labaBersih,
+                            modalAwal: modalAwal,
+                            modalAkhir: modalAkhir,
+                            kas: totalSale,
+                            piutang: piutang,
+                            persediaan: persediaan,
+                            peralatan: peralatan,
+                            akumulasiPeralatan: penyusutanTool,
+                            aktivaTetap: aktivaTetap,
+                            aktivaLancar: aktivaLancar,
+                            passiva: passiva,
+                            utangDagang: utangDagang,
+                            totalRetur: 0,
+                            pembelianBarangDagang: pembelianBarangDagang,
+                            totalBiayaPengeluaran: totalOpex,
+                            pajak: options.pajak
+                        }
+                    })];
+                case 17:
+                    report = _a.sent();
+                    console.log(report);
+                    return [2 /*return*/];
+            }
         });
     });
 }
-exports.genReport = genReport;
+exports.createReport = createReport;

@@ -30,4 +30,12 @@ export async function plugin(fastify: FastifyInstance) {
     handler: handlers.postSnapshot
   })
 
+  fastify.post('/report', {
+    schema: {
+      tags: ['finance'],
+      body: DTO.Report.Obj
+    },
+    handler: handlers.postReport
+  })
+
 }

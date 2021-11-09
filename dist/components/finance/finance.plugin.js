@@ -84,6 +84,13 @@ function plugin(fastify) {
                 },
                 handler: handlers.postSnapshot
             });
+            fastify.post('/report', {
+                schema: {
+                    tags: ['finance'],
+                    body: DTO.Report.Obj
+                },
+                handler: handlers.postReport
+            });
             return [2 /*return*/];
         });
     });

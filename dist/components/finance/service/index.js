@@ -13,3 +13,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./laba-rugi.service"), exports);
 __exportStar(require("./perubahan-modal.service"), exports);
 __exportStar(require("./snapshot.service"), exports);
+__exportStar(require("./report.service"), exports);

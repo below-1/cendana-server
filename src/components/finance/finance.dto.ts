@@ -46,3 +46,12 @@ export namespace Snapshot {
   })
   export type Marker = Static<typeof Obj>
 }
+
+export namespace Report {
+  export const Obj = Type.Object({
+    month: Type.Number(),
+    year: Type.Number(),
+    pajak: Type.Number()
+  })
+  export type Marker = Static<typeof Obj>
+}
