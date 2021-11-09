@@ -4,24 +4,6 @@ import * as DTO from './finance.dto'
 
 export async function plugin(fastify: FastifyInstance) {
 
-  fastify.get('/laba-rugi/:type', {
-    schema: {
-      tags: ['finance'],
-      querystring: DTO.LabaRugi.Obj,
-      params: DTO.RespType.Obj
-    },
-    handler: handlers.getLabaRugi
-  })
-
-  fastify.get('/perubahan-modal/:type', {
-    schema: {
-      tags: ['finance'],
-      querystring: DTO.PerubahanModal.Obj,
-      params: DTO.RespType.Obj
-    },
-    handler: handlers.getPerubahanModal
-  })
-
   fastify.post('/snapshot', {
     schema: {
       tags: ['finance'],
