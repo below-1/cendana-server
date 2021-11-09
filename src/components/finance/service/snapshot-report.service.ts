@@ -2,7 +2,7 @@ import { prisma } from '@cend/commons/prisma'
 import { format, parse, lastDayOfMonth, setMonth, setYear, setDate } from 'date-fns'
 import { id as localeId } from 'date-fns/locale'
 
-export interface ReportOptions {
+interface ReportOptions {
   month: number;
   year: number;
   pajak: number;
