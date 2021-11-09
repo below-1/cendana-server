@@ -8,7 +8,7 @@ export interface ReportOptions {
   pajak: number;
 }
 
-export async function createReport(options: ReportOptions) {
+export async function snapshotReport(options: ReportOptions) {
   let startDate = new Date()
   startDate = setYear(startDate, options.year)
   startDate = setMonth(startDate, options.month)
