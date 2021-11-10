@@ -1,6 +1,9 @@
 import { prisma } from '@cend/commons/prisma'
 import { format, parse, lastDayOfMonth, setMonth, setYear, setDate } from 'date-fns'
 import { id as localeId } from 'date-fns/locale'
+import createError from 'fastify-error'
+
+const ReportNotFound = createError('FST_REPORT_NOT_FOUND', "Laporan untuk %s tidak ditemukan")
 
 interface ReportOptions {
   month: number;
@@ -19,6 +22,11 @@ export async function findReport(options: ReportOptions) {
       target: endDate
     }
   })
+
+  if (!report) {
+    const targetLabel = format(endDate, 'MMMM yyyy', { locale: localeId })
+    throw new ReportNotFound(targetLabel)
+  }
 
   return report
 }

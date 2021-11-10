@@ -50,7 +50,7 @@ export async function snapshotReport(options: ReportOptions) {
       where t."createdAt" >= '${t0}' and t."createdAt" <= '${t1}' and t."opexId" > 0`)
 
   const [ { nominal: modalAwal } ] = await prisma.$queryRaw(` 
-    select coalesce(re.nominal, 0) from "RecordEquity" as re
+    select re.nominal from "RecordEquity" as re
       where re."createdAt" <= '${t0}'
   `)
 
@@ -62,15 +62,26 @@ export async function snapshotReport(options: ReportOptions) {
   const [ { total: prive } ] = await prisma.$queryRaw(` 
     select coalesce(sum(t.nominal), 0) as total from "EquityChange" as ec
       left join "Transaction" t on t."equityChangeId" = ec.id
-      where t."createdAt" >= '${t0}' AND t."createdAt" <= '${t1}'
+      where 
+        t."createdAt" >= '${t0}' 
+        AND t."createdAt" <= '${t1}'
+  `)
+
+  const [ { total: penambahanModalUsaha } ] = await prisma.$queryRaw(` 
+    select coalesce(sum(t.nominal), 0) as total from "EquityChange" as ec
+      left join "Transaction" t on t."equityChangeId" = ec.id
+      where 
+        t."createdAt" >= '${t0}' 
+        AND t."createdAt" <= '${t1}'
+        AND t."type" = 'DEBIT'
   `)
 
   const [ { total: peralatan } ] = await prisma.$queryRaw(`   
-    select sum(t.nominal) as total from "Transaction" t 
+    select coalesce(sum(t.nominal), 0) as total from "Transaction" t 
       where t."createdAt" >= '${t0}' and t."createdAt" <= '${t1}' and t."toolId" > 0`)
 
   const [ { total: investment } ] = await prisma.$queryRaw(`   
-    select sum(t.nominal) as total from "Transaction" t 
+    select coalesce(sum(t.nominal), 0) as total from "Transaction" t 
       where t."createdAt" >= '${t0}' and t."createdAt" <= '${t1}' and t."investmentId" > 0`)
 
   // console.log('totalSale = ', totalSale)
@@ -84,7 +95,8 @@ export async function snapshotReport(options: ReportOptions) {
   const labaBersih = labaSebelumPajak - options.pajak
   // console.log(`labaBersih = ${labaBersih}`)
 
-  const modalAkhir = modalAwal + (labaBersih - prive)
+  console.log('modalAwal = ', modalAwal)
+  const modalAkhir = modalAwal + labaBersih
 
   const penyusutanTool = peralatan / endDate.getDate()
 
@@ -135,6 +147,8 @@ export async function snapshotReport(options: ReportOptions) {
       pembelianBarangDagang,
       totalBiayaPengeluaran: totalOpex,
       pajak: options.pajak,
+
+      investasi: investment,
 
       arusKasInvestasi,
       arusKasOperasional
