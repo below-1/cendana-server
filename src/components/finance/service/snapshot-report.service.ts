@@ -112,6 +112,7 @@ export async function snapshotReport(options: ReportOptions) {
       totalPenjualan: totalSale,
       hpp,
       labaKotor,
+      labaSebelumPajak,
       labaBersih,
 
       modalAwal,
