@@ -76,6 +76,16 @@ export async function snapshotReport(options: ReportOptions) {
         AND t."type" = 'DEBIT'
   `)
 
+  const [ { total: pengembalianModal } ] = await prisma.$queryRaw(` 
+    select coalesce(sum(t.nominal), 0)
+      from join "Transaction" t on t."equityChangeId" = ec.id
+      where 
+        t."createdAt" >= '${t0}' 
+        AND t."createdAt" <= '${t1}'
+        AND t."type" = 'DEBIT'
+        AND t."pengembalianModalFlag" > 0
+  `)
+
   const [ { total: peralatan } ] = await prisma.$queryRaw(`   
     select coalesce(sum(t.nominal), 0) as total from "Transaction" t 
       where t."createdAt" >= '${t0}' and t."createdAt" <= '${t1}' and t."toolId" > 0`)

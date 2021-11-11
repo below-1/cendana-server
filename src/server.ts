@@ -47,6 +47,7 @@ export function createServer() {
   server.register(components.equity.plugin, { prefix: '/v1/api/equity' })
   server.register(components.investment.plugin, { prefix: '/v1/api/investment' })
   server.register(components.investmentTrans.plugin, { prefix: '/v1/api/investment-trans' })
+  server.register(components.roc.plugin, { prefix: '/v1/api/roc' })
 
   return server
 }

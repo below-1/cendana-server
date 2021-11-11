@@ -227,6 +227,8 @@ model Transaction {
   equityChangeId  Int?
   investment            Investment?   @relation(fields: [investmentId], references: [id], onDelete: Cascade)
   investmentId          Int?
+  // Flag to decide whether this is a 'PengembalianModal'
+  pengembalianModalFlag Int?
 
   description String? @db.Text
 }
