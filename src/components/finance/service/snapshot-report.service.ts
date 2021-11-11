@@ -51,7 +51,8 @@ export async function snapshotReport(options: ReportOptions) {
 
   const [ { nominal: modalAwal } ] = await prisma.$queryRaw(` 
     select re.nominal from "RecordEquity" as re
-      where re."createdAt" <= '${t0}'
+      where re."createdAt" = '${t0}'
+      limit 1
   `)
 
   const [ { total: utangDagang } ] = await prisma.$queryRaw(`
@@ -76,7 +77,7 @@ export async function snapshotReport(options: ReportOptions) {
         AND t."type" = 'DEBIT'
   `)
 
-  const [ { total: pengembalianModal } ] = await prisma.$queryRaw(` 
+  const [ { total: roc } ] = await prisma.$queryRaw(` 
     select coalesce(sum(t.nominal), 0)
       from join "Transaction" t on t."equityChangeId" = ec.id
       where 
@@ -161,7 +162,9 @@ export async function snapshotReport(options: ReportOptions) {
       investasi: investment,
 
       arusKasInvestasi,
-      arusKasOperasional
+      arusKasOperasional,
+
+      roc
     }
   })
   console.log(report)

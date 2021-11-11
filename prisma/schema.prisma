@@ -326,7 +326,7 @@ model FinanceReport {
   kendaraanBaru         Decimal?
   investasi             Decimal?
   penambahanModalUsaha  Decimal?
-  pengembalianHutangModal   Decimal?
+  roc                   Decimal?
 
   arusKasOperasional      Decimal?
   arusKasInvestasi        Decimal?
