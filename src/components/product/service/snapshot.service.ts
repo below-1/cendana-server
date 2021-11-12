@@ -24,3 +24,12 @@ export async function snapshot(target: Date) {
     data: snapshotData
   })
 }
+
+export async function checkSnapshot(target: Date) {
+  const total = await prisma.recordProduct.count({
+    where: {
+      date: target
+    }
+  })
+  return total > 0
+}

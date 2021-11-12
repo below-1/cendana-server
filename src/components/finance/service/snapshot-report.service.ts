@@ -1,5 +1,13 @@
 import { prisma } from '@cend/commons/prisma'
-import { format, parse, lastDayOfMonth, setMonth, setYear, setDate } from 'date-fns'
+import { 
+  format, 
+  parse, 
+  lastDayOfMonth, 
+  setMonth, 
+  setYear, 
+  setDate, 
+  addMonths
+} from 'date-fns'
 import { id as localeId } from 'date-fns/locale'
 
 interface ReportOptions {
@@ -51,7 +59,7 @@ export async function snapshotReport(options: ReportOptions) {
 
   const [ { nominal: modalAwal } ] = await prisma.$queryRaw(` 
     select re.nominal from "RecordEquity" as re
-      where re."createdAt" = '${t0}'
+      where re."createdAt" <= '${t0}'
       limit 1
   `)
 
@@ -167,5 +175,15 @@ export async function snapshotReport(options: ReportOptions) {
       roc
     }
   })
+
+  // Save next month
+  const nextMonth = addMonths(endDate, 1)
+  await prisma.recordEquity.create({
+    data: {
+      createdAt: nextMonth,
+      nominal: modalAkhir
+    }
+  })
+  
   console.log(report)
 }

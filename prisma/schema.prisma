@@ -323,6 +323,7 @@ model FinanceReport {
   pembelianBarangDagang     Decimal?
   totalBiayaPengeluaran     Decimal?
   pajakUsaha                Decimal?
+  prive                 Decimal?
   kendaraanBaru         Decimal?
   investasi             Decimal?
   penambahanModalUsaha  Decimal?
