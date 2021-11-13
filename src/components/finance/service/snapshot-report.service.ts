@@ -1,4 +1,5 @@
 import { prisma } from '@cend/commons/prisma'
+import { Decimal } from '@prisma/client/runtime';
 import { 
   format, 
   parse, 
@@ -13,7 +14,7 @@ import { id as localeId } from 'date-fns/locale'
 interface ReportOptions {
   month: number;
   year: number;
-  pajak: number;
+  pajak: string;
 }
 
 export async function snapshotReport(options: ReportOptions) {
@@ -40,11 +41,11 @@ export async function snapshotReport(options: ReportOptions) {
         d.type = 'RECEIVABLE'
         and d."createdAt" between '${t0}' and '${t1}'`)  
 
-  const [ { total: hppStart } ] = await prisma.$queryRaw(`
+  let [ { total: hppStart } ] = await prisma.$queryRaw(`
     select hpp as total 
       from "RecordProduct" rp where rp."date" = '${t0}'`)
 
-  const [ { total: hppEnd } ] = await prisma.$queryRaw(`
+  let [ { total: hppEnd } ] = await prisma.$queryRaw(`
     select hpp as total 
       from "RecordProduct" rp where rp."date" = '${t1}'`)
 
@@ -104,29 +105,36 @@ export async function snapshotReport(options: ReportOptions) {
     select coalesce(sum(t.nominal), 0) as total from "Transaction" t 
       where t."createdAt" >= '${t0}' and t."createdAt" <= '${t1}' and t."investmentId" > 0`)
 
-  // console.log('totalSale = ', totalSale)
-  // console.log('hppStart = ', hppStart)
-  const hpp = hppStart - hppEnd
-  // console.log('hpp = ', hpp)
-  const labaKotor = totalSale - hpp
-  // console.log('labaKotor = ', labaKotor)
-  const labaSebelumPajak = labaKotor - totalOpex
-  // console.log('labaSebelumPajak = ', labaSebelumPajak)
-  const labaBersih = labaSebelumPajak - options.pajak
-  // console.log(`labaBersih = ${labaBersih}`)
+  const hppStart_dec = new Decimal(hppStart)
+  const hppEnd_dec = new Decimal(hppEnd)
+  const totalSale_dec = new Decimal(totalSale)
+  const totalOpex_dec = new Decimal(totalOpex)
+  const pajak_dec = new Decimal(options.pajak)
+  const modalAwal_dec = new Decimal(modalAwal)
+  const peralatan_dec = new Decimal(peralatan)
+  const piutang_dec = new Decimal(piutang)
+  const persediaan_dec = new Decimal(persediaan)
+  const utangDagang_dec = new Decimal(utangDagang)
+  const pembelianBarangDagang_dec = new Decimal(pembelianBarangDagang)
+  const investment_dec = new Decimal(investment)
 
-  console.log('modalAwal = ', modalAwal)
-  const modalAkhir = modalAwal + labaBersih
+  const hpp = hppStart_dec.sub(hppEnd_dec)
+  const labaKotor = totalSale_dec.sub(hpp)
+  const labaSebelumPajak = labaKotor.sub(totalOpex_dec)
+  const labaBersih = labaSebelumPajak.sub(pajak_dec)
+  const modalAkhir = modalAwal_dec.add(labaBersih)
+  const penyusutanTool = peralatan_dec.div( endDate.getDate() )
+  const totalRetur = new Decimal(0)
 
-  const penyusutanTool = peralatan / endDate.getDate()
-
-  const aktivaLancar = totalSale + piutang + persediaan
-  const aktivaTetap = peralatan - penyusutanTool
-  const passiva = utangDagang + modalAkhir
-
-  const totalRetur = 0
-  const arusKasOperasional = totalSale + totalRetur - (pembelianBarangDagang + totalOpex + options.pajak)
-  const arusKasInvestasi = investment + peralatan
+  const aktivaLancar = totalSale_dec.add(piutang_dec).add(persediaan_dec)
+  const aktivaTetap = peralatan_dec.sub(penyusutanTool)
+  const passiva = utangDagang_dec.add(modalAkhir)
+  const arusKasOperasional = totalSale_dec
+    .add(totalRetur)
+    .sub(pembelianBarangDagang_dec
+        .add(totalOpex_dec)
+        .add(pajak_dec))
+  const arusKasInvestasi = investment_dec.add(peralatan_dec)
 
   try {
     await prisma.financeReport.delete({
@@ -141,34 +149,34 @@ export async function snapshotReport(options: ReportOptions) {
   const report = await prisma.financeReport.create({
     data: {
       target: endDate,
-      totalPenjualan: totalSale,
+      totalPenjualan: totalSale_dec,
       hpp,
       labaKotor,
       labaSebelumPajak,
       labaBersih,
 
-      modalAwal,
+      modalAwal: modalAwal_dec,
       modalAkhir,
 
-      kas: totalSale,
-      piutang,
-      persediaan,
+      kas: totalSale_dec,
+      piutang: piutang_dec,
+      persediaan: persediaan_dec,
 
-      peralatan,
+      peralatan: peralatan_dec,
       akumulasiPeralatan: penyusutanTool,
 
       aktivaTetap,
       aktivaLancar,
       passiva,
 
-      utangDagang,
+      utangDagang: utangDagang_dec,
 
       totalRetur: 0,
-      pembelianBarangDagang,
-      totalBiayaPengeluaran: totalOpex,
-      pajak: options.pajak,
+      pembelianBarangDagang: pembelianBarangDagang_dec,
+      totalBiayaPengeluaran: totalOpex_dec,
+      pajak: pajak_dec,
 
-      investasi: investment,
+      investasi: investment_dec,
 
       arusKasInvestasi,
       arusKasOperasional,
@@ -187,14 +195,17 @@ export async function snapshotReport(options: ReportOptions) {
       }
     })
   } catch (err) {
-
   }
-  await prisma.recordEquity.create({
-    data: {
-      createdAt: nextMonth,
-      nominal: modalAkhir
-    }
-  })
-  
-  console.log(report)
+
+  try {
+    const recordEquity = await prisma.recordEquity.create({
+      data: {
+        createdAt: nextMonth,
+        nominal: modalAkhir
+      }
+    })
+    console.log(recordEquity)
+  } catch (err) {
+    console.log(err)
+  }
 }

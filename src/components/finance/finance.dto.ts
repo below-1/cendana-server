@@ -51,7 +51,7 @@ export namespace CreateReport {
   export const Obj = Type.Object({
     month: Type.Number(),
     year: Type.Number(),
-    pajak: Type.Number()
+    pajak: Type.String()
   })
   export type Marker = Static<typeof Obj>
 }
