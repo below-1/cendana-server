@@ -17,12 +17,6 @@ export type GetReportRequest = Request<{
 }>
 
 
-export async function postSnapshot(request: PostSnapshotRequest, reply: Reply) { 
-  const date = new Date(request.query.target)
-  await snapshot(date)
-  reply.send({ message: 'OK' })
-}
-
 export async function postReport(request: PostReportRequest, reply: Reply) {
   const options = request.body
   const result = await snapshotReport(options)

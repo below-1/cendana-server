@@ -63,8 +63,6 @@ model ProductCategory {
   updatedAt       DateTime       @updatedAt
   title           String         @db.VarChar(255)
   products        Product[]
-  RecordProduct   RecordProduct? @relation(fields: [recordProductId], references: [id])
-  recordProductId Int?
 }
 
 model User {
@@ -103,7 +101,6 @@ model Product {
   categories   ProductCategory[]
   stockRecords StockItem[]
   saleRecords  OrderItem[]
-  records      RecordProduct[]
   unit         String
 }
 
@@ -130,8 +127,6 @@ model StockItem {
   sold            Int            @default(0)
   defect          Int            @default(0)
   returned        Int            @default(0)
-  RecordProduct   RecordProduct? @relation(fields: [recordProductId], references: [id])
-  recordProductId Int?
 }
 
 model OrderItem {
@@ -153,8 +148,6 @@ model OrderItem {
   quantity        Int
   discount        Int            @default(0)
   description     String?        @db.Text
-  RecordProduct   RecordProduct? @relation(fields: [recordProductId], references: [id])
-  recordProductId Int?
 }
 
 model Order {
@@ -252,24 +245,8 @@ model Tool {
 }
 
 model RecordProduct {
-  id        Int      @id @default(autoincrement())
-  date      DateTime @default(now())
-  product   Product  @relation(fields: [productId], references: [id])
-  productId Int
-
-  buyPrice  Decimal @default(0)
-  sellPrice Decimal @default(0)
-  discount  Int     @default(0)
-
-  available Int @default(0)
-  sold      Int @default(0)
-  defect    Int @default(0)
-  returned  Int @default(0)
-
-  categories   ProductCategory[]
-  stockRecords StockItem[]
-  saleRecords  OrderItem[]
-  unit         String
+  date      DateTime @id @default(now())
+  hpp       Decimal  @default(0)
 }
 
 model EquityChange {

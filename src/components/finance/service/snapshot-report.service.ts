@@ -41,11 +41,12 @@ export async function snapshotReport(options: ReportOptions) {
         and d."createdAt" between '${t0}' and '${t1}'`)  
 
   const [ { total: hppStart } ] = await prisma.$queryRaw(`
-    select coalesce(sum(rp.available * rp."sellPrice"), 0) as total 
+    select hpp as total 
       from "RecordProduct" rp where rp."date" = '${t0}'`)
 
   const [ { total: hppEnd } ] = await prisma.$queryRaw(`
-    select sum(rp.available * rp."sellPrice") total from "RecordProduct" rp where rp."date" = '${t1}'`)
+    select hpp as total 
+      from "RecordProduct" rp where rp."date" = '${t1}'`)
 
   const [ { total: persediaan } ] = await prisma.$queryRaw(`
     select sum(p.available * p."sellPrice") as total from "Product" p`)
@@ -86,8 +87,8 @@ export async function snapshotReport(options: ReportOptions) {
   `)
 
   const [ { total: roc } ] = await prisma.$queryRaw(` 
-    select coalesce(sum(t.nominal), 0)
-      from join "Transaction" t on t."equityChangeId" = ec.id
+    select coalesce(sum(t.nominal), 0) as total
+      from "Transaction" t
       where 
         t."createdAt" >= '${t0}' 
         AND t."createdAt" <= '${t1}'
@@ -178,6 +179,16 @@ export async function snapshotReport(options: ReportOptions) {
 
   // Save next month
   const nextMonth = addMonths(endDate, 1)
+  console.log(nextMonth)
+  try {
+    await prisma.recordEquity.deleteMany({
+      where: {
+        createdAt: nextMonth
+      }
+    })
+  } catch (err) {
+
+  }
   await prisma.recordEquity.create({
     data: {
       createdAt: nextMonth,
