@@ -245,8 +245,9 @@ model Tool {
 }
 
 model RecordProduct {
-  date      DateTime @id @default(now())
-  hpp       Decimal  @default(0)
+  date        DateTime @id @default(now())
+  hpp         Decimal  @default(0)
+  persediaan  Decimal  @default(0)
 }
 
 model EquityChange {
@@ -275,6 +276,8 @@ model FinanceReport {
   target                DateTime    @id
 
   totalPenjualan                 Decimal?
+  hppAwal                   Decimal?
+  hppAkhir                   Decimal?
   hpp                   Decimal?
   labaKotor             Decimal?
   opex                  Decimal?

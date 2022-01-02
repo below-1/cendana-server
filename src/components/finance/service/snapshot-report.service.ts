@@ -42,11 +42,11 @@ export async function snapshotReport(options: ReportOptions) {
         and d."createdAt" between '${t0}' and '${t1}'`)  
 
   let [ { total: hppStart } ] = await prisma.$queryRaw(`
-    select hpp as total 
+    select coalesce(persediaan, 0) as total 
       from "RecordProduct" rp where rp."date" = '${t0}'`)
 
   let [ { total: hppEnd } ] = await prisma.$queryRaw(`
-    select hpp as total 
+    select coalesce(persediaan, 0) as total 
       from "RecordProduct" rp where rp."date" = '${t1}'`)
 
   const [ { total: persediaan } ] = await prisma.$queryRaw(`
@@ -105,6 +105,12 @@ export async function snapshotReport(options: ReportOptions) {
     select coalesce(sum(t.nominal), 0) as total from "Transaction" t 
       where t."createdAt" >= '${t0}' and t."createdAt" <= '${t1}' and t."investmentId" > 0`)
 
+  console.log(hppStart)
+  console.log(hppEnd)
+
+  console.log(`total_opex = ${totalOpex}`)
+  console.log(`prive = ${prive}`)
+
   const hppStart_dec = new Decimal(hppStart)
   const hppEnd_dec = new Decimal(hppEnd)
   const totalSale_dec = new Decimal(totalSale)
@@ -122,6 +128,7 @@ export async function snapshotReport(options: ReportOptions) {
   const labaKotor = totalSale_dec.sub(hpp)
   const labaSebelumPajak = labaKotor.sub(totalOpex_dec)
   const labaBersih = labaSebelumPajak.sub(pajak_dec)
+  const kas = totalSale_dec.sub(totalOpex_dec)
   const modalAkhir = modalAwal_dec.add(labaBersih)
   const penyusutanTool = peralatan_dec.div( endDate.getDate() )
   const totalRetur = new Decimal(0)
@@ -149,7 +156,11 @@ export async function snapshotReport(options: ReportOptions) {
   const report = await prisma.financeReport.create({
     data: {
       target: endDate,
+      prive,
       totalPenjualan: totalSale_dec,
+      opex: totalOpex_dec,
+      hppAwal: hppStart_dec,
+      hppAkhir: hppEnd_dec,
       hpp,
       labaKotor,
       labaSebelumPajak,
@@ -158,7 +169,7 @@ export async function snapshotReport(options: ReportOptions) {
       modalAwal: modalAwal_dec,
       modalAkhir,
 
-      kas: totalSale_dec,
+      kas,
       piutang: piutang_dec,
       persediaan: persediaan_dec,
 

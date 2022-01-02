@@ -9,6 +9,7 @@ type FindOneRequest = Request<{ Params: ID.Marker }>;
 type FindRequest = Request<{ Querystring: DTO.Find.Marker }>;
 type SealRequest = Request<{ Params: ID.Marker, Body: DTO.SealTransaction.Marker }>;
 type DelRequest = Request<{ Params: ID.Marker }>;
+type PrintRequest = Request<{ Querystring: DTO.Find.Marker }>;
 
 export async function post(request: PostRequest, reply: Reply) {
   const payload = request.body;
@@ -59,4 +60,17 @@ export async function remove(request: DelRequest, reply: Reply) {
   const { id } = request.params;
   const purchase = await services.remove(id);
   reply.send(purchase);
+}
+
+export async function print(request: PrintRequest, reply: Reply) {
+  const {
+    year,
+    month
+  } = request.query;
+  const result = await services.printSales({ year, month });
+  const filename = `sales-${year}-${month}.xlsx`;
+  reply
+    .header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.shee')
+    .header('Content-Disposition', `attachment;filename=${filename}`)
+    .send(result);
 }

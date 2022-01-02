@@ -7,7 +7,7 @@ interface PrintOptions {
 }
 
 export async function print(options: PrintOptions) {
-  const fullPath = join(process.cwd(), 'report', options.path + '.docx')
+  const fullPath = join(process.cwd(), 'report', options.path)
   return new Promise<Buffer>((resolve, reject) => {
     carbone.render(fullPath, options.data, (err, result) => {
       if (err) {

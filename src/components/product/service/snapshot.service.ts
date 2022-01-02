@@ -6,14 +6,17 @@ export async function snapshot(target: Date) {
   // console.log('target = ', target)
   // return []
   const t1 = format(target, 'yyyy-MM-dd')
-  const [ { hpp } ] = await prisma.$queryRaw(`
-    select sum(p.available * p."sellPrice") total from "Product" p`)
+  const [ { total: hpp } ] = await prisma.$queryRaw(`
+    select coalesce(sum(p.available * p."sellPrice"), 0) as total from "Product" p`)
+  const [ { total: persediaan } ] = await prisma.$queryRaw(`
+    select coalesce(sum(p.available * p."sellPrice"), 0) as total from "Product" p`)
 
   await prisma.$executeRaw`delete from "RecordProduct" where "date" = ${target}`
   await prisma.recordProduct.create({
     data: {
       date: target,
-      hpp: hpp ? hpp : 0
+      hpp: hpp ? hpp : 0,
+      persediaan: persediaan ? persediaan : 0
     }
   })
 }

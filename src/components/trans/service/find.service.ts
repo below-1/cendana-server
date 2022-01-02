@@ -59,6 +59,14 @@ export async function findTransactions(t: TransType, options: FindOptions) {
       ]
       break;
 
+    case TransType.INVESTMENT:
+      conditions = [
+        ...conditions,
+        { description: { contains: options.keyword } },
+        { type: TransactionType.CREDIT }
+      ]
+      break;
+
     case TransType.AP_PAYMENT:
       conditions = [
         ...conditions,
@@ -109,6 +117,7 @@ export async function findTransactions(t: TransType, options: FindOptions) {
       tool: true,
       order: true,
       author: true,
+      investment: true,
       equityChange: true
     },
     orderBy: {

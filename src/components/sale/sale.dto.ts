@@ -73,3 +73,12 @@ export namespace Find {
 
   export type Marker = Static<typeof Obj>;
 }
+
+export namespace Print {
+  export const Obj = Type.Object({
+    year: Type.Number(),
+    month: Type.Number()
+  })
+
+  export type Marker = Static<typeof Obj>;
+}

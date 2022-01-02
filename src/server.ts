@@ -7,7 +7,7 @@ import * as components from '@cend/components'
 
 export function createServer() {
   const server = fastify({
-    logger: process.env.NODE_ENV == 'development'
+    // logger: process.env.NODE_ENV == 'development'
   })
   server.register(cors)
   server.register(blipp)

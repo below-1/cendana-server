@@ -55,4 +55,12 @@ export async function plugin(fastify: FastifyInstance) {
     handler: handler.remove
   })
 
+  fastify.get('/print', {
+    schema: {
+      tags: ['sales'],
+      querystring: DTO.Print.Obj
+    },
+    handler: handler.print
+  })
+
 }

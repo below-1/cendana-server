@@ -1,0 +1,163 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum DocStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum TipeMataKuliah {
+  WAJIB
+  PILIHAN
+  UMUM
+}
+
+enum Sex {
+  PRIA
+  WANITA
+}
+
+enum Scope {
+  SUPERADMIN
+  OWNER
+  ADMIN
+  DOSEN
+  MAHASISWA
+  PA
+  KAPRODI
+}
+
+model Tenant {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  universitas String
+  fakultas  String
+  jurusan String
+  prodi String
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String @unique
+  password  String
+  scopes Scope[]
+  mahasiswaId Int?
+  dosenId Int?
+  tenantId Int
+}
+
+model Dosen {
+  id        Int      @id @default(autoincrement())
+  nama String
+  avatar String?
+  nip String
+  sex Sex
+  tenantId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Mahasiswa {
+  id        Int      @id @default(autoincrement())
+  avatar String?
+  nama String
+  nim String
+  sex Sex
+  tahunMasuk Int
+  semester Int
+  tenantId Int
+  paId  Int?
+  createdAt DateTime @default(now())
+  createdBy Int
+  updatedAt DateTime @updatedAt
+  updatedBy Int
+}
+
+model MataKuliah {
+  id        Int      @id @default(autoincrement())
+  kode String 
+  nama String
+  tipe TipeMataKuliah
+  sks Int
+  tenantId  Int
+  createdAt DateTime @default(now())
+  createdBy Int
+  updatedAt DateTime @updatedAt
+  updatedBy Int
+}
+
+model Kelas {
+  id        Int      @id @default(autoincrement())
+  mataKuliahId  Int
+  tahun Int
+  semester Int
+
+  status DocStatus
+
+  tenantId Int
+
+  createdAt DateTime @default(now())
+  createdBy Int
+  updatedAt DateTime @updatedAt
+  updatedBy Int
+}
+
+model Ruangan {
+  id        Int      @id @default(autoincrement())
+  kapasitas Int
+
+  tenantId Int
+
+  createdAt DateTime @default(now())
+  createdBy Int
+  updatedAt DateTime @updatedAt
+  updatedBy Int
+}
+
+model Jadwal {
+  id        Int      @id @default(autoincrement())
+  label String
+  hari Int
+  slot Int
+  ruanganId Int
+  kelasId Int
+
+  status DocStatus
+
+  tenantId Int
+
+  createdAt DateTime @default(now())
+  createdBy Int
+  updatedAt DateTime @updatedAt
+  updatedBy Int
+}
+
+model JadwalDosen {
+  id        Int      @id @default(autoincrement())
+  dosenId   Int
+
+  createdAt DateTime @default(now())
+  createdBy Int
+  updatedAt DateTime @updatedAt
+  updatedBy Int
+}
+
+model JadwalMahasiswa {
+  id        Int      @id @default(autoincrement())
+  mahasiswaId   Int
+
+  createdAt DateTime @default(now())
+  createdBy Int
+  updatedAt DateTime @updatedAt
+  updatedBy Int
+}
