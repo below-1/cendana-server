@@ -1,4 +1,5 @@
 import { prisma } from '@cend/commons/prisma'
+import { Decimal } from '@prisma/client/runtime';
 import { format, parse, lastDayOfMonth, setMonth, setYear, setDate } from 'date-fns'
 import { id as localeId } from 'date-fns/locale'
 import createError from 'fastify-error'
@@ -28,5 +29,13 @@ export async function findReport(options: ReportOptions) {
     throw new ReportNotFound(targetLabel)
   }
 
-  return report
+  let aktiva = report.aktivaLancar ? report.aktivaLancar : new Decimal('0');
+  if (report.aktivaTetap) {
+    aktiva = aktiva.add(report.aktivaTetap)
+  }
+
+  return {
+    ...report,
+    aktiva
+  }
 }
