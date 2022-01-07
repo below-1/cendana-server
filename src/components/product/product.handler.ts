@@ -21,6 +21,7 @@ type GetSalesRequest = FastifyRequest<{
   Params: ID.Marker,
   Querystring: FindOptions.Marker
 }>
+type PrintRequest = FastifyRequest;
 
 export async function post(request: PostRequest, reply: Reply) {
   const result = await Services.create(request.body);
@@ -93,4 +94,12 @@ export async function checkSnapshot(
   reply.send({
     result
   })
+}
+
+export async function print(request: PrintRequest, reply: Reply) {
+  const stream = await Services.printProducts();
+  reply
+    .header('Content-Type', 'text/csv')
+    .header('Content-Disposition', 'attachment;filname=products.csv')
+    .send(stream);
 }

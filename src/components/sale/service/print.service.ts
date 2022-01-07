@@ -1,8 +1,9 @@
 import { prisma } from '@cend/commons/prisma';
 import { OrderType } from '@prisma/client';
 import { FindOptions } from '@cend/commons/find';
-import { print } from '@cend/components/printer';
 import { toDateUpperLower } from '@cend/commons/to-date-upper-lower'
+import { format } from 'date-fns';
+import * as csv from 'fast-csv';
 
 type Conditions = {
   year: number;
@@ -68,6 +69,10 @@ export async function printSales(options: Conditions) {
   }
   // console.log(items);
   // throw new Error('stop');
-  const buffer = await print({ data: { items },  path: 'sales.xlsx' });
-  return buffer;
+  const csvStream = csv.format({ headers: true });
+  items.forEach(item => {
+    csvStream.write(item);
+  });
+  csvStream.end();
+  return csvStream;
 }

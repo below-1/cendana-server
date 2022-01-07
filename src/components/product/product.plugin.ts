@@ -83,4 +83,11 @@ export async function plugin(fastify: FastifyInstance) {
     },
     handler: handler.createSnapshot
   })
+
+  fastify.get('/print', {
+    schema: {
+      tags: ['products', 'report']
+    },
+    handler: handler.print
+  })
 }

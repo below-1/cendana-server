@@ -130,7 +130,12 @@ export async function snapshotReport(options: ReportOptions) {
   const labaBersih = labaSebelumPajak.sub(pajak_dec)
   const kas = totalSale_dec.sub(totalOpex_dec)
   const modalAkhir = modalAwal_dec.add(labaBersih)
+  // console.log('peralatan_dec')
+  // console.log(peralatan_dec)
+  // console.log('endDate.getDate()')
+  // console.log(endDate.getDate())
   const penyusutanTool = peralatan_dec.div( endDate.getDate() )
+  console.log('penyusutanTool = ', penyusutanTool)
   const totalRetur = new Decimal(0)
 
   const aktivaLancar = totalSale_dec.add(piutang_dec).add(persediaan_dec)

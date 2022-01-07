@@ -8,3 +8,4 @@ export * from './update.service';
 export * from './find-purchases.service'
 export * from './find-sales.service'
 export * from './snapshot.service'
+export * from './print.service';

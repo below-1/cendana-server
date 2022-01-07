@@ -67,10 +67,11 @@ export async function print(request: PrintRequest, reply: Reply) {
     year,
     month
   } = request.query;
-  const result = await services.printSales({ year, month });
-  const filename = `sales-${year}-${month}.xlsx`;
+  const stream = await services.printSales({ year, month });
+  const filename = `sales-${year}-${month}.csv`;
+
   reply
-    .header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.shee')
-    .header('Content-Disposition', `attachment;filename=${filename}`)
-    .send(result);
+    .header('Content-Type', 'text/csv')
+    .header('Content-Disposition', `attachment;filname=${filename}`)
+    .send(stream);
 }
